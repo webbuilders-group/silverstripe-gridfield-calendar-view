@@ -1,0 +1,7 @@
+/tests            export-ignore
+/docs             export-ignore
+/.gitattributes   export-ignore
+/.travis.yml      export-ignore
+/.scrutinizer.yml export-ignore
+/.gitignore       export-ignore
+/.editorconfig    export-ignore

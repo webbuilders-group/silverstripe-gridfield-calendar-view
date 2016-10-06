@@ -36,6 +36,10 @@
     padding: 5px 8px 6px;
 }
 
+.calendar-view-mode-toggle ul li.active a {
+    cursor: default;
+}
+
 .calendar-view-mode-toggle ul li:first-child a {
     border-right: 0;
     

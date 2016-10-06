@@ -1,7 +1,36 @@
 (function($) {
     $.entwine('ss', function($) {
+        /**
+         * Calendar Toggle Component
+         */
+        $('.ss-gridfield .calendar-view-mode-toggle').entwine({
+            onadd: function() {
+                this._super();
+                
+                //Restore the selected button if the rembered state is calendar
+                var gridField=this.closest('.ss-gridfield');
+                var state=gridField.getState().GridFieldCalendarView;
+                if(state && state.view_mode=='calendar') {
+                    this.find('.calendar-view-list').parent().removeClass('active');
+                    this.find('.calendar-view-month').parent().addClass('active');
+                }
+            }
+        });
+        
+        
+        /**
+         * Calendar Toggle Component items
+         */
         $('.ss-gridfield .calendar-view-mode-toggle li a').entwine({
             onclick: function(e) {
+                //If already active do nothing
+                if(this.parent().hasClass('active')) {
+                    return false;
+                }
+                
+                
+                var gridField=this.closest('.ss-gridfield');
+                
                 //Remove all active
                 this.parent().siblings('.active').removeClass('active');
                 
@@ -11,12 +40,25 @@
                 
                 //Switch the view mode
                 if(this.attr('data-view-mode')=='calendar') {
-                    this.closest('.ss-gridfield').find('.ss-gridfield-table').hide();
-                    this.closest('.ss-gridfield').find('.ss-gridfield-calendar').show().redraw();
+                    gridField.find('.ss-gridfield-table').hide();
+                    gridField.find('.ss-gridfield-calendar').show().redraw();
                 }else {
-                    this.closest('.ss-gridfield').find('.ss-gridfield-calendar').hide();
-                    this.closest('.ss-gridfield').find('.ss-gridfield-table').show();
+                    gridField.find('.ss-gridfield-calendar').hide();
+                    gridField.find('.ss-gridfield-table').show();
                 }
+                
+                
+                var state=gridField.getState().GridFieldCalendarView;
+                if(state) {
+                    state.view_mode=this.attr('data-view-mode');
+                }else {
+                    state={
+                        view_mode: this.attr('data-view-mode'),
+                        start_date: ''
+                    };
+                }
+                
+                gridField.setState('GridFieldCalendarView', state);
                 
                 
                 return false;
@@ -24,9 +66,24 @@
         });
         
         
+        /**
+         * Calendar Component
+         */
         $('.ss-gridfield .ss-gridfield-calendar').entwine({
             GridFieldID: null,
             Rendered: false,
+            
+            onadd: function() {
+                this._super();
+                
+                //Restore the calendar to the front if the rembered state says to
+                var gridField=this.closest('.ss-gridfield');
+                var state=gridField.getState().GridFieldCalendarView;
+                if(state && state.view_mode=='calendar') {
+                    gridField.find('.ss-gridfield-table').hide();
+                    this.show().redraw();
+                }
+            },
             
             redraw: function() {
                 var self=this;
@@ -38,15 +95,27 @@
                 
                 
                 var gridField=this.closest('.ss-gridfield');
+                var state=gridField.getState().GridFieldCalendarView;
+                
                 this.setGridFieldID(gridField.attr('id'));
                 
                 
                 /**** Bootstrap Calendar ****/
                 var calendar=self.find('.calendar-display');
                 var stateField=gridField.find('.gridstate');
+                var monthHop=false;
+                
+                //Reload the start date from the grid state
+                var startDate=null;
+                if(state && state.start_date!='') {
+                    startDate=state.start_date;
+                    console.log(startDate);
+                }
+                
                 calendar.fullCalendar({
                     editable: false,
                     eventLimit: true,
+                    defaultDate: startDate,
                     events: {
                         url: self.attr('data-calendar-feed'),
                         type: 'POST',
@@ -72,6 +141,27 @@
                     },
                     
                     /**
+                     * Handles when the view is rendered
+                     */
+                    viewRender: function(view, element) {
+                        if(monthHop) {
+                            var state=gridField.getState().GridFieldCalendarView;
+                            if(state) {
+                                //Store start date in the state
+                                if(view.start.format('D')==1) {
+                                    state.start_date=view.start.format('YYYY-MM-01');
+                                }else {
+                                    state.start_date=view.start.add(1, 'months').format('YYYY-MM-01');
+                                }
+                                
+                                gridField.setState('GridFieldCalendarView', state);
+                            }
+                            
+                            monthHop=false;
+                        }
+                    },
+                    
+                    /**
                      * Handles when the view is destroyed
                      * @param {object} view Calendar View Object
                      * @param {object} element jQuery object representing the view
@@ -79,6 +169,8 @@
                     viewDestroy: function(view, element) {
                         //Remove all calendar tips
                         $('.gridfield-calendar-tip').remove();
+                        
+                        monthHop=true;
                     },
                     
                     /**

@@ -242,7 +242,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
                             'start'=>date('c', strtotime($event->{$this->_startDateField})),
                             'end'=>date('c', strtotime($event->{$this->_endDateField})),
                             'url'=>Controller::join_links($gridField->Link('item'), $event->ID, 'edit'),
-                            'className'=>($event->getIsDeletedFromStage() ? 'deleted-event':null)
+                            'className'=>($event->hasMethod('getIsDeletedFromStage') && $event->getIsDeletedFromStage() ? 'deleted-event':null)
                         );
         }
         

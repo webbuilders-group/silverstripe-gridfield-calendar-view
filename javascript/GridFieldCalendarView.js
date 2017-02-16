@@ -109,7 +109,6 @@
                 var startDate=null;
                 if(state && state.start_date!='') {
                     startDate=state.start_date;
-                    console.log(startDate);
                 }
                 
                 calendar.fullCalendar({

@@ -150,7 +150,7 @@
                                 if(view.start.format('D')==1) {
                                     state.start_date=view.start.format('YYYY-MM-01');
                                 }else {
-                                    state.start_date=view.start.add(1, 'months').format('YYYY-MM-01');
+                                    state.start_date=view.start.clone().add(1, 'months').format('YYYY-MM-01');
                                 }
                                 
                                 gridField.setState('GridFieldCalendarView', state);

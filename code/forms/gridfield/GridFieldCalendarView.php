@@ -228,7 +228,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
         
         $events=$list
                     ->filter($this->_startDateField.':GreaterThanOrEqual', date('Y-m-01 00:00:00', strtotime($startDate)))
-                    ->filter($this->_startDateField.':LessThanOrEqual', date('Y-m-'.date('t').' 11:59:59', strtotime($endDate)))
+                    ->filter($this->_startDateField.':LessThanOrEqual', date('Y-m-'.date('t').' 23:59:59', strtotime($endDate)))
                     ->sort($this->_startDateField);
         
         

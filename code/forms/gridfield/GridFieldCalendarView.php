@@ -70,7 +70,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
      * Gets the start date/time field used
      * @return {string}
      */
-    public function getStartDateField($field) {
+    public function getStartDateField() {
         return $this->_startDateField;
     }
     
@@ -188,7 +188,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     public function handleCalendarFeed(GridField $gridField, SS_HTTPRequest $request) {
         //Validate Security Token
         if(!SecurityToken::inst()->checkRequest($request)) {
-            return $this->httpError(403, 'Security Token Expired or Invalid');
+            return Controller::curr()->httpError(403, 'Security Token Expired or Invalid');
         }
         
         
@@ -228,7 +228,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
         
         $events=$list
                     ->filter($this->_startDateField.':GreaterThanOrEqual', date('Y-m-01 00:00:00', strtotime($startDate)))
-                    ->filter($this->_startDateField.':LessThanOrEqual', date('Y-m-'.date('t').' 23:59:59', strtotime($endDate)))
+                    ->filter($this->_startDateField.':LessThanOrEqual', date('Y-m-t 23:59:59', strtotime($endDate)))
                     ->sort($this->_startDateField);
         
         

@@ -2,6 +2,7 @@
 
 namespace WebbuildersGroup\SilverStripe\GridFieldCalendarView\Forms\GridField;
 
+use SilverStripe\View\ArrayData;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Security\SecurityToken;
@@ -55,8 +56,8 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
         $toggleData = ArrayData::create([]);
 
         return [
-            'after' => $calendarData->renderWith('GridFieldCalendarView'),
-            $this->_togglePosition => $toggleData->renderWith('GridFieldCalendarView_toggle')
+            'after' => $calendarData->renderWith(self::class),
+            $this->_togglePosition => $toggleData->renderWith(self::class . '_toggle')
         ];
     }
     

@@ -1,6 +1,6 @@
 <?php
 
-namespace WebbuildersGroup\SilverStripe\GridFieldCalendarView\Forms\GridField;
+namespace WebbuildersGroup\SilverStripe\GridFieldCalendarView;
 
 use SilverStripe\View\ArrayData;
 use SilverStripe\Control\Controller;

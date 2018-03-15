@@ -40,9 +40,9 @@
                 //Switch the view mode
                 if(this.attr('data-view-mode')=='calendar') {
                     gridField.find('.grid-field__table').hide();
-                    gridField.find('.ss-gridfield-calendar').show().redraw();
+                    gridField.find('.grid-field__calendar').show().redraw();
                 } else {
-                    gridField.find('.ss-gridfield-calendar').hide();
+                    gridField.find('.grid-field__calendar').hide();
                     gridField.find('.grid-field__table').show();
                 }
 
@@ -65,7 +65,7 @@
         /**
          * Calendar Component
          */
-        $('.ss-gridfield .ss-gridfield-calendar').entwine({
+        $('.ss-gridfield .grid-field__calendar').entwine({
             GridFieldID: null,
             Rendered: false,
 

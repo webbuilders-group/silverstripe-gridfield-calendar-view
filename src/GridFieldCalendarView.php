@@ -30,7 +30,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
      * @param {string} $summaryField Name of the field to be used for the summary in the calendar
      * @param {string} $allDayField Name of the field to be used to determin if the field is an all day event result must be boolean like
      */
-    public function __construct($startDateField, $endDateField, $togglePosition='buttons-before-left', $titleField='Title', $summaryField='Summary', $allDayField='IsAllDay')
+    public function __construct($startDateField, $endDateField, $togglePosition='buttons-before-right', $titleField='Title', $summaryField='Summary', $allDayField='IsAllDay')
     {
         $this->_startDateField=$startDateField;
         $this->_endDateField=$endDateField;

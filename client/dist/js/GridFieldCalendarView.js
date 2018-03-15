@@ -10,9 +10,10 @@
                 //Restore the selected button if the rembered state is calendar
                 var gridField=this.closest('.ss-gridfield');
                 var state=gridField.getState().GridFieldCalendarView;
+
                 if(state && state.view_mode=='calendar') {
-                    this.find('.calendar-view-list').parent().removeClass('active');
-                    this.find('.calendar-view-month').parent().addClass('active');
+                    this.find('.calendar-view-list').removeClass('active');
+                    this.find('.calendar-view-month').addClass('active');
                 }
             }
         });
@@ -21,61 +22,56 @@
         /**
          * Calendar Toggle Component items
          */
-        $('.ss-gridfield .calendar-view-mode-toggle li a').entwine({
+        $('.ss-gridfield .calendar-view-mode-toggle .btn').entwine({
             onclick: function(e) {
                 //If already active do nothing
-                if(this.parent().hasClass('active')) {
+                if(this.hasClass('active')) {
                     return false;
                 }
-                
-                
+
                 var gridField=this.closest('.ss-gridfield');
-                
+
                 //Remove all active
-                this.parent().siblings('.active').removeClass('active');
-                
+                this.siblings('.active').removeClass('active');
+
                 //Mark this as the active one
-                this.parent().addClass('active');
-                
-                
+                this.addClass('active');
+
                 //Switch the view mode
                 if(this.attr('data-view-mode')=='calendar') {
-                    gridField.find('.ss-gridfield-table').hide();
+                    gridField.find('.grid-field__table').hide();
                     gridField.find('.ss-gridfield-calendar').show().redraw();
-                }else {
+                } else {
                     gridField.find('.ss-gridfield-calendar').hide();
-                    gridField.find('.ss-gridfield-table').show();
+                    gridField.find('.grid-field__table').show();
                 }
-                
-                
+
                 var state=gridField.getState().GridFieldCalendarView;
-                if(state) {
+                if (state) {
                     state.view_mode=this.attr('data-view-mode');
-                }else {
+                } else {
                     state={
                         view_mode: this.attr('data-view-mode'),
                         start_date: ''
                     };
                 }
-                
+
                 gridField.setState('GridFieldCalendarView', state);
-                
-                
+
                 return false;
             }
         });
-        
-        
+
         /**
          * Calendar Component
          */
         $('.ss-gridfield .ss-gridfield-calendar').entwine({
             GridFieldID: null,
             Rendered: false,
-            
+
             onadd: function() {
                 this._super();
-                
+
                 //Restore the calendar to the front if the rembered state says to
                 var gridField=this.closest('.ss-gridfield');
                 var state=gridField.getState().GridFieldCalendarView;

@@ -1,10 +1,4 @@
-<div class="calendar-view-mode-toggle">
-    <ul>
-        <li class="active">
-            <a href="#" class="calendar-view-list icon-button font-icon-list" title="List View" data-view-mode="default"><!-- --></a>
-        </li>
-        <li>
-            <a href="#" class="calendar-view-month" title="Calendar View" data-view-mode="calendar"><!-- --></a>
-        </li>
-    </ul>
+<div class="calendar-view-mode-toggle btn-group">
+    <button class="calendar-view-list btn btn-secondary btn--icon-sm btn--no-text font-icon-list active" title="List View" data-view-mode="default"></button>
+    <button class="calendar-view-month btn btn-secondary btn--icon-sm btn--no-text font-icon-columns" title="Calendar View" data-view-mode="calendar"></button>
 </div>

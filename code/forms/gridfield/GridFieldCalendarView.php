@@ -6,8 +6,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     private $_titleField;
     private $_summaryField;
     private $_allDayField;
-    
-    
+
     /**
      * Constructor
      * @param {string} $startDateField Name of the Start Date field
@@ -32,27 +31,17 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
      */
     public function getHTMLFragments($gridField) {
         $dataList=$gridField->getList();
-        
-        
+
         $calendarData=new ArrayData(array(
-                                        'FeedLink'=>$gridField->Link('calendar-data-feed')
-                                    ));
-        
-        
+            'FeedLink'=>$gridField->Link('calendar-data-feed')
+        ));
+
         $toggleData=new ArrayData(array());
-        
 
-        Requirements::css(SS_GFCV_BASE.'/javascript/externals/fullcalendar/fullcalendar.min.css');
-        Requirements::css(SS_GFCV_BASE.'/css/GridFieldCalendarView.css');
-
-        Requirements::javascript(SS_GFCV_BASE.'/javascript/externals/fullcalendar/moment.min.js');
-        Requirements::javascript(SS_GFCV_BASE.'/javascript/externals/fullcalendar/fullcalendar.min.js');
-        Requirements::javascript(SS_GFCV_BASE.'/javascript/GridFieldCalendarView.js');
-        
         return array(
-                    'after'=>$calendarData->renderWith('GridFieldCalendarView'),
-                    $this->_togglePosition=>$toggleData->renderWith('GridFieldCalendarView_toggle')
-                );
+            'after'=>$calendarData->renderWith('GridFieldCalendarView'),
+            $this->_togglePosition=>$toggleData->renderWith('GridFieldCalendarView_toggle')
+        );
     }
     
     /**

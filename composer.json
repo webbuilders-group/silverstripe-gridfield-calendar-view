@@ -24,7 +24,8 @@
     },
     "extra": {
         "expose": [
-            "client/dist"
+            "client/dist",
+            "node_modules"
         ]
     },
     "autoload": {

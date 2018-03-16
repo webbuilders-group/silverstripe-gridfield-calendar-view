@@ -1,0 +1,76 @@
+.grid-field__calendar {
+    display: none;
+}
+
+/**** Calendar Display ****/
+.grid-field__calendar .calendar-display .fc-toolbar {
+    margin-top: 1.3rem;
+    text-transform: uppercase;
+}
+
+.grid-field__calendar .calendar-display .fc-today {
+    text-transform: uppercase;
+}
+
+.grid-field__calendar .calendar-display .fc-head .fc-widget-header th {
+    padding-top: 1.2308rem;
+    padding-bottom: 1.2308rem;
+}
+
+.grid-field__calendar .calendar-display .fc-widget-content .fc-content {
+    padding: 0.5rem;
+    font-size: 13px;
+}
+
+.grid-field__calendar .calendar-display .fc-day-grid-event.deleted-event {
+    text-decoration: line-through;
+}
+
+.gridfield-calendar-tip {
+    background: #FFFFFF;
+    position: absolute;
+    font-size: 14p.2x;
+    width: 300px;
+    margin-top: 1.2308rem;
+    padding: 1.2308rem;
+    z-index: 1000;
+    border: 1px solid #CCCCCC;
+    box-shadow: 2px 3px 4px 0px rgba(0, 0, 0, 0.2);
+}
+
+.gridfield-calendar-tip:after, .gridfield-calendar-tip:before {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    pointer-events: none;
+}
+
+.gridfield-calendar-tip:after {
+    margin-left: -10px;
+    border-bottom-color: #FFFFFF;
+    border-width: 10px;
+}
+
+.gridfield-calendar-tip:before {
+    margin-left: -11px;
+    border-bottom-color: #CCCCCC;
+    border-width: 11px;
+}
+
+.gridfield-calendar-tip .evt-title {
+    font-weight: bold;
+}
+
+.gridfield-calendar-tip p {
+    margin: 0;
+}
+
+.gridfield-calendar-tip hr {
+    margin: 16px 0;
+    border: 0;
+    border-bottom: 1px solid #CCCCCC;
+}

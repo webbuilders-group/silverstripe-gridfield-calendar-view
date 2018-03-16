@@ -1,8 +1,12 @@
 {
     "name": "webbuilders-group/silverstripe-gridfield-calendar-view",
     "description": "A component for viewing a GridField's data as a calendar",
-    "type": "silverstripe-module",
-    "keywords": ["silverstripe", "gridfield", "calendar"],
+    "type": "silverstripe-vendormodule",
+    "keywords": [
+        "silverstripe",
+        "gridfield",
+        "calendar"
+    ],
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -13,13 +17,20 @@
     ],
     "require":
     {
-        "silverstripe/framework": "~3.3",
-        "composer/installers": "*"
+        "silverstripe/framework": "~4.0"
     },
     "support": {
         "issues": "https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/issues"
     },
     "extra": {
-        "installer-name": "gridfield-calendar-view"
+        "expose": [
+            "client/dist",
+            "node_modules"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "WebbuildersGroup\\SilverStripe\\GridFieldCalendarView\\": "src/"
+        }
     }
 }

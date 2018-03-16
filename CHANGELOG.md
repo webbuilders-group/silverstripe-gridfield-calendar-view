@@ -17,3 +17,8 @@
 **Implemented enhancements:**
 
 - Remember the view state [\#1](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/issues/1)
+
+
+## 2.0.0
+
+* SilverStripe 4.x port of module 

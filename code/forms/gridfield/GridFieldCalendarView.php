@@ -10,6 +10,27 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     private $_allDayField;
 
     /**
+     * Default options for the FullCalendar instance
+     * 
+     * @var array
+     */
+    private $default_options = array(
+        "header" => array(
+            "left" => 'title',
+            "center" => '',
+            "right" => 'today prev,next'
+        ),
+        "footer" => false
+    );
+
+    /**
+     * Overwrite the default options with your own settings
+     * 
+     * @var array
+     */
+    private $custom_options = array();
+
+    /**
      * Constructor
      * @param {string} $startDateField Name of the Start Date field
      * @param {string} $endDateField Name of the End Date field
@@ -36,23 +57,31 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     {
         $dataList = $gridField->getList();
 
-        $calendarData= ArrayData::create(array(
-            'FeedLink' => $gridField->Link('calendar-data-feed')
+        $options = json_encode(array_merge(
+            $this->default_options,
+            $this->getCustomOptions()
         ));
 
-        $toggleData = ArrayData::create(array());
+        $calendarData= ArrayData::create(array(
+            'FeedLink' => $gridField->Link('calendar-data-feed'),
+        ));
 
-        Requirements::css(SS_GFCV_BASE.'/javascript/externals/fullcalendar/fullcalendar.min.css');
+        Requirements::customScript(<<<JS
+            var gridfield_calendar_data = $options
+JS
+        );
+
+        Requirements::css(SS_GFCV_BASE.'/node_modules/fullcalendar/dist/fullcalendar.min.css');
         Requirements::css(SS_GFCV_BASE.'/css/GridFieldCalendarView.css');
 
-        Requirements::javascript(SS_GFCV_BASE.'/javascript/externals/fullcalendar/moment.min.js');
-        Requirements::javascript(SS_GFCV_BASE.'/javascript/externals/fullcalendar/fullcalendar.min.js');
+        Requirements::javascript(SS_GFCV_BASE.'/node_modules/moment/min/moment.min.js');
+        Requirements::javascript(SS_GFCV_BASE.'/node_modules/fullcalendar/dist/fullcalendar.min.js');
         Requirements::javascript(SS_GFCV_BASE.'/javascript/GridFieldCalendarView.js');
-        
+
         return array(
             'after' => $calendarData
                 ->renderWith('GridFieldCalendarView'),
-            $this->_togglePosition => $toggleData
+            $this->_togglePosition => $gridField
                 ->renderWith('GridFieldCalendarView_toggle')
         );
     }
@@ -177,7 +206,29 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     {
         return $this->_allDayField;
     }
-    
+
+    /**
+     * Gets the calendar options that are currently set
+     * 
+     * @return {string}
+     */
+    public function getCustomOptions()
+    {
+        return $this->custom_options;
+    }
+
+    /**
+     * Overwrite the custom calendar options
+     * 
+     * @param {array} $data List of items to appear in the header
+     * @return {GridFieldCalendarView}
+     */
+    public function setCustomOptions($options)
+    {
+        $this->custom_options = $options;
+        return $this;
+    }
+
     /**
      * Return URLs to be handled by this grid field component, in an array the same form as $url_handlers.
      * @return {array}

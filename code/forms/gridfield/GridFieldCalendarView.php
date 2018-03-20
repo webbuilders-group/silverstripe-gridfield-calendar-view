@@ -71,11 +71,11 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
 JS
         );
 
-        Requirements::css(SS_GFCV_BASE.'/node_modules/fullcalendar/dist/fullcalendar.min.css');
+        Requirements::css(SS_GFCV_BASE.'/css/fullcalendar.min.css');
         Requirements::css(SS_GFCV_BASE.'/css/GridFieldCalendarView.css');
 
-        Requirements::javascript(SS_GFCV_BASE.'/node_modules/moment/min/moment.min.js');
-        Requirements::javascript(SS_GFCV_BASE.'/node_modules/fullcalendar/dist/fullcalendar.min.js');
+        Requirements::javascript(SS_GFCV_BASE.'/javascript/moment.min.js');
+        Requirements::javascript(SS_GFCV_BASE.'/javascript/fullcalendar.min.js');
         Requirements::javascript(SS_GFCV_BASE.'/javascript/GridFieldCalendarView.js');
 
         return array(

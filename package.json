@@ -1,0 +1,14 @@
+{
+  "name": "gridfield-calendar-view",
+  "version": "1.0.0",
+  "description": "JS dependencies for GridField Calendar View",
+  "dependencies": {
+    "fullcalendar": "^3.9.0"
+  },
+  "scripts": {
+    "install": "node movenpm.js"
+  },
+  "author": "",
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view#readme"
+}

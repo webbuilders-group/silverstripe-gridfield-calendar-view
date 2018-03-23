@@ -56,6 +56,22 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     public function getHTMLFragments($gridField)
     {
         $dataList = $gridField->getList();
+        $controller = Controller::curr();
+        
+        // Get the current query string and and to the request
+        // if available
+        $request = $controller->getRequest();
+        $request_vars = $request->getVars();
+
+        if (array_key_exists("url", $request_vars)) {
+            unset($request_vars["url"]);
+        }
+
+        $params = http_build_query($request_vars);
+
+        if (!empty($params)) {
+            $params = "?" . $params;
+        }
 
         $options = json_encode(array_merge(
             $this->default_options,
@@ -63,7 +79,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
         ));
 
         $calendarData= ArrayData::create(array(
-            'FeedLink' => $gridField->Link('calendar-data-feed'),
+            'FeedLink' => $gridField->Link('calendar-data-feed') . $params
         ));
 
         Requirements::customScript(<<<JS

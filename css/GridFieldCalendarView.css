@@ -1,24 +1,17 @@
 /**** Calendar View Toggle ****/
 .calendar-view-mode-toggle {
     border: 1px solid #CDCCD0;
-    
     border-radius: 4px;
 }
 
 .calendar-view-mode-toggle:after {
     clear: both;
-    
     display: block;
-    
     content: ' ';
-    
     width: 0;
     height: 0;
-    
     font-size: 0;
-    
     line-height: 0;
-    
     visibility: hidden;
 }
 
@@ -28,10 +21,8 @@
 
 .calendar-view-mode-toggle ul li a {
     display: block;
-    
     font-size: 14px;
     color: #4F5861;
-    
     margin-right: 0 !important;
     padding: 5px 8px 6px;
 }
@@ -42,19 +33,16 @@
 
 .calendar-view-mode-toggle ul li:first-child a {
     border-right: 0;
-    
     border-radius: 3px 0 0 3px;
 }
 
 .calendar-view-mode-toggle ul li:last-child a {
     border-left: 1px solid #CDCCD0;
-    
     border-radius: 0 3px 3px 0;
 }
 
 .calendar-view-mode-toggle ul li.active {
     background-color: #D4DBE1;
-    
     box-shadow: inset 0 0 3px rgba(191, 194, 196, 0.9);
 }
 
@@ -69,11 +57,8 @@
 .calendar-view-mode-toggle ul li a.calendar-view-month:after {
     background: url(./../images/gridfield-calendar-icon.png) no-repeat top center;
     background-size: 16px auto;
-    
     display: block;
-    
     content: "";
-    
     width: 14px;
     height: 15px;
 }
@@ -82,11 +67,8 @@
 /**** Calendar Display ****/
 .ss-gridfield-calendar {
     display: none;
-    
     clear: both;
-    
     position: relative;
-    
     padding-bottom: 80.7%;
 }
 
@@ -96,61 +78,45 @@
     top: 0;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-toolbar {
+.ss-gridfield-calendar .calendar-display .fc-header-toolbar {
     background: #98AAB6 linear-gradient(#B0BEC7, #98AAB6);
-    
     min-height: 40px;
-    
     margin: 0;
     padding: 5px;
-    
     border-bottom: 1px solid #899EAB;
-    
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-toolbar .fc-left h2 {
+.ss-gridfield-calendar .calendar-display .fc-header-toolbar h2 {
     font-size: 16.8px;
     color: #FFFFFF;
-    
     margin: 1px 8px 0;
     padding: 0;
-    
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
 }
 
 .ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button {
     background: #B0BEC7;
-    
     color: #545454;
-    
     height: auto;
-    
     border: 1px solid #C2CDD4;
     border-right-color: #748D9D;
     border-bottom-color: #748D9D;
-    
     padding: 0;
-    
     border-radius: 2px;
-    
     text-shadow: none !important;
-    
     vertical-align: middle;
-    
     box-shadow: none;
 }
 
 .ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button:hover {
     background: #BAC9D1;
-    
     box-shadow: none;
 }
 
 .ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button .ui-button-text {
     padding: 0 12px;
-    
     line-height: 25px;
 }
 
@@ -173,10 +139,8 @@
 
 .ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button-group .fc-button:last-child {
     border-left: 0;
-    
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    
     margin-left: 0;
 }
 
@@ -189,17 +153,13 @@
     background: #F0F2F4;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-view-container:after {
+.ss-gridfield-calendar .calendar-display .fc-footer-toolbar {
     background-image: linear-gradient(#B0BEC7, #98AAB6);
-    
     display: block;
-    
     content: "";
-    
     min-height: 28px;
-    
     padding: 4px 12px;
-    
+    margin-top: 0;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
 }
@@ -218,20 +178,14 @@
 
 .ss-gridfield-calendar .calendar-display .fc-head .fc-widget-header th {
     background: #98aab6;
-    
     border-top: 1px solid #A4B4BF;
     border-left: 1px solid #A4B4BF;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-right: 1px solid rgba(0, 0, 0, 0.1);
-    
     color: #FFFFFF;
-    
     height: 32px;
-    
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
-    
     vertical-align: middle;
-    
     white-space: nowrap;
 }
 
@@ -242,7 +196,6 @@
 
 .ss-gridfield-calendar .calendar-display .fc-day-grid-event {
     background: #358FC3;
-    
     font-size: 14px;
 }
 
@@ -252,22 +205,14 @@
 
 .gridfield-calendar-tip {
     background: #FFFFFF;
-    
     position: absolute;
-    
     font-size: 14px;
-    
     width: 300px;
-    
     margin-top: 10px;
     padding: 10px;
-    
     z-index: 1000;
-    
     border: 1px solid #CCCCCC;
-    
     border-radius: 4px;
-    
     box-shadow: 2px 3px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
@@ -275,27 +220,21 @@
     position: absolute;
     bottom: 100%;
     left: 50%;
-    
     border: solid transparent;
-    
     content: " ";
-    
     height: 0;
     width: 0;
-    
     pointer-events: none;
 }
 
 .gridfield-calendar-tip:after {
     margin-left: -10px;
-    
     border-bottom-color: #FFFFFF;
     border-width: 10px;
 }
 
 .gridfield-calendar-tip:before {
     margin-left: -11px;
-    
     border-bottom-color: #CCCCCC;
     border-width: 11px;
 }
@@ -310,7 +249,6 @@
 
 .gridfield-calendar-tip hr {
     margin: 16px 0;
-    
     border: 0;
     border-bottom: 1px solid #CCCCCC;
 }

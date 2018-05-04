@@ -2,12 +2,57 @@
 class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHandler
 {
 
+    /**
+     * The name of the db field used for the start date
+     * 
+     * @var string
+     */
     private $_startDateField;
+
+    /**
+     * The name of the field used for the end date
+     * 
+     * @var string
+     */
     private $_endDateField;
+
+    /**
+     * The location on the gridfield to add the toggle controls
+     * 
+     * @var string
+     */
     private $_togglePosition;
+
+    /**
+     * The name of the field (DB, Casted, etc) used to generate a title
+     * to appear on the calendar
+     * 
+     * @var string
+     */
     private $_titleField;
+
+    /**
+     * The name of the field (DB, Casted, etc) used for to provide more detailed
+     * info about this event
+     * 
+     * @var string
+     */
     private $_summaryField;
+
+    /**
+     * The name of the field (DB, Casted, etc) used to determine if the event
+     * shows as "All Day"
+     * 
+     * @var string
+     */
     private $_allDayField;
+
+    /**
+     * The name of the field (DB, Casted, etc) used for the event colour
+     * 
+     * @var string
+     */
+    private $_colourField;
 
     /**
      * Default options for the FullCalendar instance
@@ -50,8 +95,12 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     }
 
     /**
-     * Returns a map where the keys are fragment names and the values are pieces of HTML to add to these fragments.
-     * @return {array}
+     * Returns a map where the keys are fragment names and the values are pieces
+     * of HTML to add to these fragments.
+     * 
+     * @param GridField $gridField The current gridfield
+     * 
+     * @return array
      */
     public function getHTMLFragments($gridField)
     {
@@ -246,7 +295,9 @@ JS
     }
 
     /**
-     * Return URLs to be handled by this grid field component, in an array the same form as $url_handlers.
+     * Return URLs to be handled by this grid field component, in an array the same
+     * form as $url_handlers.
+     * 
      * @return {array}
      */
     public function getURLHandlers($gridField)
@@ -258,8 +309,10 @@ JS
     
     /**
      * Handles retrieving the data for the calendar
-     * @param {GridField} $gridField GridField instance
-     * @param {SS_HTTPRequest} $request HTTP Request Object
+     * 
+     * @param {GridField}      $gridField GridField instance
+     * @param {SS_HTTPRequest} $request   HTTP Request Object
+     * 
      * @return {string} Response JSON
      */
     public function handleCalendarFeed(GridField $gridField, SS_HTTPRequest $request)
@@ -324,7 +377,7 @@ JS
             ))->sort($this->_startDateField);
 
         //Build the response data
-        $result = array();
+        $results = array();
         foreach ($events as $event) {
             $deleted_event_class = null;
 
@@ -332,7 +385,7 @@ JS
                 $deleted_event_class = 'deleted-event';
             }
             
-            $result[] = array(
+            $result = array(
                 'title' => $event->{$this->_titleField},
                 'abstractText' => $event->{$this->_summaryField},
                 'allDay' => (bool) $event->{$this->_allDayField},
@@ -341,14 +394,44 @@ JS
                 'url' => Controller::join_links($gridField->Link('item'), $event->ID, 'edit'),
                 'className' => $deleted_event_class
             );
+
+            if ($this->getColourField()) {
+                $result["color"] = $event->{$this->getColourField()};
+            }
+
+            $results[] = $result;
         }
 
         //Serialize to json
-        $result = json_encode($result);
+        $results = json_encode($results);
 
         //Respond with the resulting json
         $response = Controller::curr()->getResponse();
         $response->addHeader('Content-Type', 'application/json; charset=utf-8');
-        return $result;
+        return $results;
+    }
+
+    /**
+     * Get the value of _colourField
+     * 
+     * @return string
+     */ 
+    public function getColourField()
+    {
+        return $this->_colourField;
+    }
+
+    /**
+     * Set the value of _colourField
+     * 
+     * @param string $_colourField The name of the field to deisgnate colour
+     *
+     * @return  self
+     */ 
+    public function setColourField($_colourField)
+    {
+        $this->_colourField = $_colourField;
+
+        return $this;
     }
 }

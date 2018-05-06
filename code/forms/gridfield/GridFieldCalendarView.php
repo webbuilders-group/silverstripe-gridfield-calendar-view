@@ -523,7 +523,7 @@ JS
      *
      * @return self
      */ 
-    public function setShowCalendarDefault(boolean $_show_calendar_default)
+    public function setShowCalendarDefault($_show_calendar_default)
     {
         $this->_show_calendar_default = $_show_calendar_default;
 

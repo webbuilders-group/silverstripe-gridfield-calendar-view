@@ -1,26 +1,61 @@
 (function($) {
+    /**
+     * Set the current GridField Calendar state (so we know what view we are
+     * looking at).
+     */
+    function setGridState(gridField, state, mode) {
+        if (state) {
+            state.view_mode = mode;
+        } else {
+            state = {
+                view_mode: mode,
+                start_date: ''
+            };
+        }
+
+        gridField.setState('GridFieldCalendarView', state);
+    }
+
     $.entwine('ss', function($) {
-        /**
-         * Calendar Toggle Component
-         */
-        $('.ss-gridfield .calendar-view-mode-toggle').entwine({
-            onadd: function() {
-                this._super();
-
-                //Restore the selected button if the rembered state is calendar
-                var gridField = this.closest('.ss-gridfield');
-                var state = gridField.getState().GridFieldCalendarView;
-                if (state && state.view_mode == 'calendar') {
-                    this.find('.calendar-view-list').parent().removeClass('active');
-                    this.find('.calendar-view-month').parent().addClass('active');
-                }
-            }
-        });
-
         /**
          * Calendar Toggle Component items
          */
         $('.ss-gridfield .calendar-view-mode-toggle li a').entwine({
+
+            /**
+             * Either generate, or regenerate the calendar view
+             */
+            drawCalendar: function() {
+                var gridField = this.closest('.ss-gridfield');
+                var state = gridField.getState().GridFieldCalendarView;
+
+                //Switch the view mode
+                if (state && state.view_mode == 'calendar') {
+                    gridField.find('.ss-gridfield-table').hide();
+                    gridField.find('.ss-gridfield-calendar').show().redraw();
+                } else {
+                    gridField.find('.ss-gridfield-calendar').hide();
+                    gridField.find('.ss-gridfield-table').show();
+                }
+            },
+            onadd: function() {
+                this._super();
+                var gridField = this.closest('.ss-gridfield');
+                var state = gridField.getState().GridFieldCalendarView;
+                var mode;
+                var active = this.parent().hasClass('active');
+                
+                //If already active do nothing
+                if (active) {
+                    mode = this.attr('data-view-mode');
+                }
+
+                setGridState(gridField, state, mode);
+
+                if (active) {
+                    this.drawCalendar();
+                }
+            },
             onclick: function(e) {
                 //If already active do nothing
                 if (this.parent().hasClass('active')) {
@@ -28,6 +63,8 @@
                 }
 
                 var gridField = this.closest('.ss-gridfield');
+                var state = gridField.getState().GridFieldCalendarView;
+                var mode = this.attr('data-view-mode');
 
                 //Remove all active
                 this.parent().siblings('.active').removeClass('active');
@@ -35,26 +72,9 @@
                 //Mark this as the active one
                 this.parent().addClass('active');
 
-                //Switch the view mode
-                if (this.attr('data-view-mode') == 'calendar') {
-                    gridField.find('.ss-gridfield-table').hide();
-                    gridField.find('.ss-gridfield-calendar').show().redraw();
-                } else {
-                    gridField.find('.ss-gridfield-calendar').hide();
-                    gridField.find('.ss-gridfield-table').show();
-                }
-
-                var state=gridField.getState().GridFieldCalendarView;
-                if (state) {
-                    state.view_mode = this.attr('data-view-mode');
-                } else {
-                    state = {
-                        view_mode: this.attr('data-view-mode'),
-                        start_date: ''
-                    };
-                }
-
-                gridField.setState('GridFieldCalendarView', state);
+                setGridState(gridField, state, mode);
+                
+                this.drawCalendar();
 
                 return false;
             }
@@ -71,12 +91,16 @@
                 this._super();
                 
                 //Restore the calendar to the front if the rembered state says to
-                var gridField=this.closest('.ss-gridfield');
-                var state=gridField.getState().GridFieldCalendarView;
-                if(state && state.view_mode=='calendar') {
-                    gridField.find('.ss-gridfield-table').hide();
-                    this.show().redraw();
-                }
+                var gridField = this
+                    .closest('.ss-gridfield');
+                var state = gridField
+                    .getState()
+                    .GridFieldCalendarView;
+                var mode = gridField
+                    .find(".calendar-view-mode-toggle li.active a")
+                    .attr('data-view-mode');
+
+                setGridState(gridField, state, mode);
             },
 
             redraw: function() {

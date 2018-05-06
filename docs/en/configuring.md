@@ -85,3 +85,37 @@ $myGridField
 // This needs to return a hex value with the hash (EG: #FF0000) 
 $calendar->setColourField("Colour");
 ```
+
+## Showing the calendar by default
+
+You can (if desired) set the calendar to appear by default (instead of the
+GridField). You can do this by setting `GridFieldCalendarView::setShowCalendarDefault()`
+to `true`. For example:
+
+```php
+// As per the example above
+$calendar->setShowCalendarDefault(true);
+```
+
+**NOTE: Height issues with calendar as default view** Showing calendar by default
+can cause some oddities regarding the height fo the calendar. This is most likely
+because the SilverStripe UI isn't fully loaded when the calendar loads, so it
+appears to load at a minimal required height.
+
+If you want to use the calender view by default, you will most likely need to tweak
+FullCalendar's settings a little, most likely:
+
+* [aspectRatio](https://fullcalendar.io/docs/aspectRatio)
+* [contentHeight](https://fullcalendar.io/docs/contentHeight)
+* [height](https://fullcalendar.io/docs/height)
+
+You can set `aspectRatio` (for example) doing the following:
+
+```php
+// Setup calendar, as per docs above
+$calendar->setCustomOptions(
+    [
+        'aspectRation': 0.75 // Height will be about 1.25 greater than width
+    ]
+);
+```

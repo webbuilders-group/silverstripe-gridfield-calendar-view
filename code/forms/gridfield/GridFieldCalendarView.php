@@ -67,6 +67,11 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     private $_colourField;
 
     /**
+     * @var boolean
+     */
+    private $_show_calendar_default = false;
+
+    /**
      * Default options for the FullCalendar instance
      * 
      * @var array
@@ -174,7 +179,12 @@ JS
             'after' => $calendarData
                 ->renderWith('GridFieldCalendarView'),
             $this->_togglePosition => $gridField
-                ->renderWith('GridFieldCalendarView_toggle')
+                ->renderWith(
+                    'GridFieldCalendarView_toggle',
+                    array(
+                        "Default" => $this->getShowCalendarDefault()
+                    )
+                )
         );
     }
 
@@ -492,6 +502,30 @@ JS
     public function setColourField($_colourField)
     {
         $this->_colourField = $_colourField;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of _show_calendar_default
+     *
+     * @return boolean
+     */ 
+    public function getShowCalendarDefault()
+    {
+        return $this->_show_calendar_default;
+    }
+
+    /**
+     * Set the value of _show_calendar_default
+     *
+     * @param boolean $_show_calendar_default Should we show the calendar as default?
+     *
+     * @return self
+     */ 
+    public function setShowCalendarDefault(boolean $_show_calendar_default)
+    {
+        $this->_show_calendar_default = $_show_calendar_default;
 
         return $this;
     }

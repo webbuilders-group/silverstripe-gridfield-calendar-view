@@ -66,7 +66,6 @@
 
 /**** Calendar Display ****/
 .ss-gridfield-calendar {
-    display: none;
     clear: both;
     position: relative;
     padding-bottom: 80.7%;

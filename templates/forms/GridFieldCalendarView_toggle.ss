@@ -1,5 +1,4 @@
 <div class="calendar-view-mode-toggle">
-    $ShowCalendarDefault
     <ul>
         <li<% if not $Default %> class="active"<% end_if %>>
             <a href="#" class="calendar-view-list icon-button font-icon-list" title="List View" data-view-mode="default"><!-- --></a>

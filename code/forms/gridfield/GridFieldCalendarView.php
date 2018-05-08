@@ -72,6 +72,16 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     private $_show_calendar_default = false;
 
     /**
+     * @var string
+     */
+    protected $feed_start_format = 'Y-m-01 00:00:00';
+
+    /**
+     * @var string
+     */
+    protected $feed_end_format = 'Y-m-t 23:59:59';
+
+    /**
      * Default options for the FullCalendar instance
      * 
      * @var array
@@ -366,6 +376,66 @@ JS
             'calendar-data-feed'=>'handleCalendarFeed'
         );
     }
+
+    /**
+     * Return a time string to use on the calendar feed (used to get the first
+     * item in the list).
+     *
+     * @param string $start The start date
+     * 
+     * @return string
+     */
+    protected function getFeedStart($start)
+    {
+        //Figure out the start date
+        $startTS = strtotime($start);
+
+        if ($start && $startTS !== false) {
+            //Push date into next month if first visible day on calendar is not 1
+            if (date('j', $startTS) !=1) {
+                $startDate = date(
+                    'Y-m-01',
+                    strtotime(date('Y-m-01', $startTS).' next month')
+                );
+            } else {
+                $startDate = date('Y-m-d', $startTS);
+            }
+        } else {
+            $startDate = date('Y-m-01');
+        }
+
+        return $startDate;
+    }
+
+    /**
+     * Return a time string to use on the calendar feed (used to get the last
+     * item in the list).
+     *
+     * @param string $end The end date
+     * 
+     * @return string
+     */
+    protected function getFeedEnd($end)
+    {
+        //Figure out the end date
+        $endTS = strtotime($end);
+
+        if ($end && $endTS !== false) {
+            //Push date into previous month if last visible day is less then 28
+            if (date('j', $endTS) < 28) {
+                $endDate = date(
+                    'Y-m-t',
+                    strtotime(date('Y-m-01', $endTS).' previous month')
+                );
+            } else {
+                $endDate = date('Y-m-d', $endTS);
+            }
+        } else {
+            $endDate = date('Y-m-t');
+        }
+
+        return $endDate;
+    }
     
     /**
      * Handles retrieving the data for the calendar
@@ -383,42 +453,10 @@ JS
                 ->httpError(403, 'Security Token Expired or Invalid');
         }
 
-        //Figure out the start date
-        $startTS = strtotime($request->postVar('start-date'));
-
-        if ($request->postVar('start-date') && $startTS !== false) {
-            //Push date into next month if first visible day on calendar is not 1
-            if (date('j', $startTS) !=1) {
-                $startDate = date(
-                    'Y-m-01',
-                    strtotime(date('Y-m-01', $startTS).' next month')
-                );
-            } else {
-                $startDate = date('Y-m-d', $startTS);
-            }
-        } else {
-            $startDate = date('Y-m-01');
-        }
-
-        //Figure out the end date
-        $endTS = strtotime($request->postVar('end-date'));
-
-        if ($request->postVar('end-date') && $endTS !== false) {
-            //Push date into previous month if last visible day is less then 28
-            if (date('j', $endTS) < 28) {
-                $endDate = date(
-                    'Y-m-t',
-                    strtotime(date('Y-m-01', $endTS).' previous month')
-                );
-            } else {
-                $endDate = date('Y-m-d', $endTS);
-            }
-        } else {
-            $endDate = date('Y-m-t');
-        }
-
-        //Fetch the month's events
+        $startDate = $this->getFeedStart($request->postVar('start-date'));
+        $endDate = $this->getFeedEnd($request->postVar('end-date'));
         $list = $gridField->getList();
+
         $deletedManip = $gridField
             ->getConfig()
             ->getComponentByType('GridFieldDeletedManipulator');
@@ -430,14 +468,14 @@ JS
         $events = $list
             ->filter(
                 array(
-                $this->_startDateField.':GreaterThanOrEqual' => date(
-                    'Y-m-01 00:00:00',
-                    strtotime($startDate)
-                ),
-                $this->_startDateField.':LessThanOrEqual' => date(
-                    'Y-m-t 23:59:59',
-                    strtotime($endDate)
-                )
+                    $this->_startDateField.':GreaterThanOrEqual' => date(
+                        $this->getFeedStartFormat(),
+                        strtotime($startDate)
+                    ),
+                    $this->_startDateField.':LessThanOrEqual' => date(
+                        $this->getFeedEndFormat(),
+                        strtotime($endDate)
+                    )
                 )
             )->sort($this->_startDateField);
 
@@ -526,6 +564,54 @@ JS
     public function setShowCalendarDefault($_show_calendar_default)
     {
         $this->_show_calendar_default = $_show_calendar_default;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of feed_start_format
+     *
+     * @return  string
+     */ 
+    public function getFeedStartFormat()
+    {
+        return $this->feed_start_format;
+    }
+
+    /**
+     * Set the value of feed_start_format
+     *
+     * @param string $feed_start_format Format string for calendar feed start
+     *
+     * @return self
+     */ 
+    public function setFeedStartFormat($feed_start_format)
+    {
+        $this->feed_start_format = $feed_start_format;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of feed_end_format
+     *
+     * @return  string
+     */ 
+    public function getFeedEndFormat()
+    {
+        return $this->feed_end_format;
+    }
+
+    /**
+     * Set the value of feed_end_format
+     *
+     * @param string $feed_end_format String of end date format
+     *
+     * @return self
+     */ 
+    public function setFeedEndFormat($feed_end_format)
+    {
+        $this->feed_end_format = $feed_end_format;
 
         return $this;
     }

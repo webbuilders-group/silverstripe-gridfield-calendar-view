@@ -551,19 +551,19 @@ JS
      */ 
     public function getShowCalendarDefault()
     {
-        return $this->_show_calendar_default;
+        return $this->show_calendar_default;
     }
 
     /**
      * Set the value of _show_calendar_default
      *
-     * @param boolean $_show_calendar_default Should we show the calendar as default?
+     * @param boolean $show_calendar_default Should we show the calendar as default?
      *
      * @return self
      */ 
-    public function setShowCalendarDefault($_show_calendar_default)
+    public function setShowCalendarDefault($show_calendar_default)
     {
-        $this->_show_calendar_default = $_show_calendar_default;
+        $this->show_calendar_default = $show_calendar_default;
 
         return $this;
     }

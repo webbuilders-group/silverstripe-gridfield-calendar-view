@@ -190,8 +190,12 @@
 }
 
 .ss-gridfield-calendar .calendar-display .fc-body .fc-widget-content {
-    border-top: 0;
     border-left-width: 1px;
+}
+
+.ss-gridfield-calendar .calendar-display .fc-body > tr > .fc-widget-content,
+.ss-gridfield-calendar .calendar-display .fc-body .fc-day-grid .fc-week:nth-child(1) .fc-widget-content {
+    border-top: 0;
 }
 
 .ss-gridfield-calendar .calendar-display .fc-day-grid-event {

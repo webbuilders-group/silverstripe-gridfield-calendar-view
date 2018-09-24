@@ -1,4 +1,16 @@
 <?php
+
+namespace WebBuildersGroup\GridFieldCalendarView\Forms\GridField;
+
+use SilverStripe\Forms\GridField\GridField_HTMLProvider;
+use SilverStripe\Forms\GridField\GridField_URLHandler;
+use SilverStripe\Control\Controller;
+use SilverStripe\View\Requirements;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Security\SecurityToken;
+use SilverStripe\View\ArrayData;
+
 class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHandler
 {
 
@@ -87,18 +99,18 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
 JS
         );
 
-        Requirements::css(SS_GFCV_BASE.'/css/fullcalendar.min.css');
-        Requirements::css(SS_GFCV_BASE.'/css/GridFieldCalendarView.css');
+        Requirements::css('webbuilders-group/silverstripe-gridfield-calendar-view:css/fullcalendar.min.css');
+        Requirements::css('webbuilders-group/silverstripe-gridfield-calendar-view:css/GridFieldCalendarView.css');
 
-        Requirements::javascript(SS_GFCV_BASE.'/javascript/moment.min.js');
-        Requirements::javascript(SS_GFCV_BASE.'/javascript/fullcalendar.min.js');
-        Requirements::javascript(SS_GFCV_BASE.'/javascript/GridFieldCalendarView.js');
+        Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/moment.min.js');
+        Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/fullcalendar.min.js');
+        Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/GridFieldCalendarView.js');
 
         return array(
             'after' => $calendarData
-                ->renderWith('GridFieldCalendarView'),
+                ->renderWith('WebBuildersGroup\GridFieldCalendarView\Forms\GridField\GridFieldCalendarView'),
             $this->_togglePosition => $gridField
-                ->renderWith('GridFieldCalendarView_toggle')
+                ->renderWith('WebBuildersGroup\GridFieldCalendarView\Forms\GridField\GridFieldCalendarView_toggle')
         );
     }
 
@@ -262,7 +274,7 @@ JS
      * @param {SS_HTTPRequest} $request HTTP Request Object
      * @return {string} Response JSON
      */
-    public function handleCalendarFeed(GridField $gridField, SS_HTTPRequest $request)
+    public function handleCalendarFeed(GridField $gridField, HTTPRequest $request)
     {
         //Validate Security Token
         if (!SecurityToken::inst()->checkRequest($request)) {

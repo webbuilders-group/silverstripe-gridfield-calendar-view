@@ -2,6 +2,8 @@
 .calendar-view-mode-toggle {
     border: 1px solid #CDCCD0;
     border-radius: 4px;
+    height: 30px;
+    margin-left: 5px;
 }
 
 .calendar-view-mode-toggle:after {
@@ -15,8 +17,16 @@
     visibility: hidden;
 }
 
+
+
+.calendar-view-mode-toggle ul {
+    padding: 0;
+}
+
 .calendar-view-mode-toggle ul li {
     float: left;
+    list-style: none;
+    height: 100%;
 }
 
 .calendar-view-mode-toggle ul li a {
@@ -61,6 +71,10 @@
     content: "";
     width: 14px;
     height: 15px;
+}
+
+.calendar-view-month {
+    height: 29px;
 }
 
 

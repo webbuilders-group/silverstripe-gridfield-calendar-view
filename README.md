@@ -7,7 +7,7 @@ A component for viewing a GridField's data as a calendar, useful for things like
 
 
 ## Requirements
-* SilverStripe Framework 3.3+
+* SilverStripe Framework 4.2+
 
 
 ## Installation

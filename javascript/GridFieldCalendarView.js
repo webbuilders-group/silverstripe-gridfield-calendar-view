@@ -37,11 +37,11 @@
 
                 //Switch the view mode
                 if (this.attr('data-view-mode') == 'calendar') {
-                    gridField.find('.ss-gridfield-table').hide();
+                    gridField.find('.ss-gridfield-table, .grid-field__table').hide();
                     gridField.find('.ss-gridfield-calendar').show().redraw();
                 } else {
                     gridField.find('.ss-gridfield-calendar').hide();
-                    gridField.find('.ss-gridfield-table').show();
+                    gridField.find('.ss-gridfield-table, .grid-field__table').show();
                 }
 
                 var state=gridField.getState().GridFieldCalendarView;
@@ -74,7 +74,7 @@
                 var gridField=this.closest('.ss-gridfield');
                 var state=gridField.getState().GridFieldCalendarView;
                 if(state && state.view_mode=='calendar') {
-                    gridField.find('.ss-gridfield-table').hide();
+                    gridField.find('.ss-gridfield-table, .grid-field__table').hide();
                     this.show().redraw();
                 }
             },

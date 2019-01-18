@@ -17,8 +17,6 @@
     visibility: hidden;
 }
 
-
-
 .calendar-view-mode-toggle ul {
     padding: 0;
 }
@@ -104,6 +102,7 @@
 
 .ss-gridfield-calendar .calendar-display .fc-header-toolbar h2 {
     font-size: 16.8px;
+    font-weight: bold;
     color: #FFFFFF;
     margin: 1px 8px 0;
     padding: 0;
@@ -135,15 +134,21 @@
 }
 
 .ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button .fc-icon {
+    top: 0;
+    
     margin: 0;
+    padding: 0 8px;
+    
+    height: 25px;
+    line-height: 25px;
+}
+
+.ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button .fc-icon:before {
+    vertical-align: middle;
 }
 
 .ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button.fc-state-disabled {
     display: none;
-}
-
-.ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button-group .fc-button .ui-button-text {
-    padding: 0 8px;
 }
 
 .ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button-group .fc-button:first-child {

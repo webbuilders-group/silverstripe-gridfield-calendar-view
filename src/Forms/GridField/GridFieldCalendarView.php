@@ -1,6 +1,5 @@
 <?php
-
-namespace WebBuildersGroup\GridFieldCalendarView\Forms\GridField;
+namespace WebbuildersGroup\GridFieldCalendarView\Forms\GridField;
 
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridField_URLHandler;
@@ -107,10 +106,8 @@ JS
         Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/GridFieldCalendarView.js');
 
         return array(
-            'after' => $calendarData
-                ->renderWith('WebBuildersGroup\GridFieldCalendarView\Forms\GridField\GridFieldCalendarView'),
-            $this->_togglePosition => $gridField
-                ->renderWith('WebBuildersGroup\GridFieldCalendarView\Forms\GridField\GridFieldCalendarView_toggle')
+            'after' => $calendarData->renderWith(self::class),
+            $this->_togglePosition => $gridField->renderWith(self::class.'_toggle')
         );
     }
 

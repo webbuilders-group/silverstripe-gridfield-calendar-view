@@ -339,7 +339,7 @@ JS
         foreach ($events as $event) {
             $deleted_event_class = null;
 
-            if ($event->hasMethod('getIsDeletedFromStage') && $event->getIsDeletedFromStage()) {
+            if (($event->hasMethod('isOnLiveOnly') && $event->isOnLiveOnly()) || ($event->hasMethod('isArchived') && $event->isArchived())) {
                 $deleted_event_class = 'deleted-event';
             }
             

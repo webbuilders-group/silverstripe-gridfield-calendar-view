@@ -9,6 +9,8 @@ use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Security\SecurityToken;
 use SilverStripe\View\ArrayData;
+use WebbuildersGroup\GridFieldDeletedItems\Forms\GridFieldDeletedManipulator;
+
 
 class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHandler
 {
@@ -314,7 +316,7 @@ JS
         $list = $gridField->getList();
         $deletedManip = $gridField
             ->getConfig()
-            ->getComponentByType('GridFieldDeletedManipulator');
+            ->getComponentByType(GridFieldDeletedManipulator::class);
 
         if ($deletedManip) {
             $list = $deletedManip->getManipulatedData($gridField, $list);

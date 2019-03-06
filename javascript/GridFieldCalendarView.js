@@ -264,5 +264,17 @@
                 this.setRendered(true);
             }
         });
+        
+        $('.ss-gridfield .ss-gridfield-calendar .fc-prev-button, .ss-gridfield .ss-gridfield-calendar .fc-next-button').entwine({
+            onmatch: function() {
+                this._super();
+                
+                this.addClass('btn')
+                    .addClass('btn-outline-secondary')
+                    .removeClass('fc-button')
+                    .removeClass('fc-state-default')
+                    .removeClass('fc-corner-right');
+            }
+        });
     });
 })(jQuery);

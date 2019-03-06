@@ -91,46 +91,18 @@
 }
 
 .ss-gridfield-calendar .calendar-display .fc-header-toolbar {
-    background: #98AAB6 linear-gradient(#B0BEC7, #98AAB6);
-    min-height: 40px;
-    margin: 0;
-    padding: 5px;
-    border-bottom: 1px solid #899EAB;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    padding: 0.9231rem;
+    margin-bottom: 0;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-header-toolbar h2 {
-    font-size: 16.8px;
-    font-weight: bold;
-    color: #FFFFFF;
-    margin: 1px 8px 0;
-    padding: 0;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+.ss-gridfield-calendar .calendar-display .fc-toolbar .fc-prev-button {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button {
-    background: #B0BEC7;
-    color: #545454;
-    height: auto;
-    border: 1px solid #C2CDD4;
-    border-right-color: #748D9D;
-    border-bottom-color: #748D9D;
-    padding: 0;
-    border-radius: 2px;
-    text-shadow: none !important;
-    vertical-align: middle;
-    box-shadow: none;
-}
-
-.ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button:hover {
-    background: #BAC9D1;
-    box-shadow: none;
-}
-
-.ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button .ui-button-text {
-    padding: 0 12px;
-    line-height: 25px;
+.ss-gridfield-calendar .calendar-display .fc-toolbar .fc-next-button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 .ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button .fc-icon {
@@ -196,20 +168,23 @@
 }
 
 .ss-gridfield-calendar .calendar-display .fc-head .fc-widget-header th {
-    background: #98aab6;
-    border-top: 1px solid #A4B4BF;
-    border-left: 1px solid #A4B4BF;
+    background: #F7F8FA;
+    
+    font-weight: normal;
+    
+    border-top: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
-    color: #FFFFFF;
-    height: 32px;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+    border-right: 0;
+    
+    padding: 0.8308rem 1.2308rem;
+    
     vertical-align: middle;
+    
     white-space: nowrap;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-body .fc-widget-content {
-    border-left-width: 1px;
+.ss-gridfield-calendar .calendar-display .fc-head .fc-widget-header th:first-child {
+    border-left: 0;
 }
 
 .ss-gridfield-calendar .calendar-display .fc-body > tr > .fc-widget-content,

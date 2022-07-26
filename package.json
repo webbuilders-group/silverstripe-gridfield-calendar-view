@@ -10,5 +10,6 @@
   },
   "author": "",
   "license": "BSD-3-Clause",
+  "repository": "https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view",
   "homepage": "https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view#readme"
 }

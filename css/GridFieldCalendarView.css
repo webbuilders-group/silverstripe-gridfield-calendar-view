@@ -159,12 +159,12 @@
     border-color: #CCCCCC;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-head div.fc-widget-header, .ss-gridfield-calendar .calendar-display .fc-head td.fc-widget-header, .ss-gridfield-calendar .calendar-display thead {
-    border: 0;
+.ss-gridfield-calendar .calendar-display .fc-content {
+    color: #FFFFFF;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-head table {
-    border-collapse: separate;
+.ss-gridfield-calendar .calendar-display .fc-head div.fc-widget-header, .ss-gridfield-calendar .calendar-display .fc-head td.fc-widget-header, .ss-gridfield-calendar .calendar-display thead {
+    border: 0;
 }
 
 .ss-gridfield-calendar .calendar-display .fc-head .fc-widget-header th {

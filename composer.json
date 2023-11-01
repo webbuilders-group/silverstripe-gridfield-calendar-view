@@ -11,9 +11,8 @@
             "role": "Developer"
         }
     ],
-    "require":
-    {
-        "silverstripe/framework": "~4.2"
+    "require": {
+        "silverstripe/framework": "~4.2|^5.0"
     },
     "support": {
         "issues": "https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/issues"

@@ -6,7 +6,7 @@
     "fullcalendar": "^3.9.0"
   },
   "scripts": {
-    "install": "node movenpm.js"
+    "postinstall": "node movenpm.js"
   },
   "author": "",
   "license": "BSD-3-Clause",

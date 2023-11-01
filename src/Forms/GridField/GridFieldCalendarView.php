@@ -23,7 +23,6 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
 
     /**
      * Default options for the FullCalendar instance
-     * 
      * @var array
      */
     private $default_options = [
@@ -51,7 +50,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
      * @param {string} $summaryField Name of the field to be used for the summary in the calendar
      * @param {string} $allDayField Name of the field to be used to determin if the field is an all day event result must be boolean like
      */
-    public function __construct($startDateField, $endDateField, $togglePosition='buttons-before-left', $titleField='Title', $summaryField='Summary', $allDayField='IsAllDay')
+    public function __construct($startDateField, $endDateField, $togglePosition = 'buttons-before-left', $titleField = 'Title', $summaryField = 'Summary', $allDayField = 'IsAllDay')
     {
         $this->_startDateField = $startDateField;
         $this->_endDateField = $endDateField;
@@ -90,7 +89,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
             $this->getCustomOptions()
         ));
 
-        $calendarData= ArrayData::create([
+        $calendarData = ArrayData::create([
             'FeedLink' => $gridField->Link('calendar-data-feed') . $params,
         ]);
 
@@ -106,10 +105,17 @@ JS
         Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/fullcalendar.min.js');
         Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/GridFieldCalendarView.js');
 
-        return [
+        $fragments = [
             'after' => $calendarData->renderWith(self::class),
-            $this->_togglePosition => $gridField->renderWith(self::class.'_toggle'),
         ];
+        
+        if ($this->_togglePosition != 'after') {
+            $fragments[$this->_togglePosition] = $gridField->renderWith(self::class . '_toggle');
+        } else {
+            $fragments['after'] = $gridField->renderWith(self::class . '_toggle')->getValue() . $fragments['after']->getValue();
+        }
+        
+        return $fragments;
     }
 
     /**

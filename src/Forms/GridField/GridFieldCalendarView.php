@@ -1,19 +1,23 @@
 <?php
 namespace WebbuildersGroup\GridFieldCalendarView\Forms\GridField;
 
+use SilverStripe\Control\Controller;
+use SilverStripe\Control\HTTPRequest;
+use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Forms\GridField\AbstractGridFieldComponent;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridField_URLHandler;
-use SilverStripe\Control\Controller;
-use SilverStripe\View\Requirements;
-use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Security\SecurityToken;
 use SilverStripe\View\ArrayData;
+use SilverStripe\View\Requirements;
 use WebbuildersGroup\GridFieldDeletedItems\Forms\GridFieldDeletedManipulator;
 
 
 class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHandler
 {
+    use Injectable;
+
     private $_startDateField;
     private $_endDateField;
     private $_togglePosition;
@@ -36,7 +40,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
 
     /**
      * Overwrite the default options with your own settings
-     * 
+     *
      * @var array
      */
     private $custom_options = [];
@@ -68,7 +72,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     {
         $dataList = $gridField->getList();
         $controller = Controller::curr();
-        
+
         // Get the current query string and and to the request
         // if available
         $request = $controller->getRequest();
@@ -108,13 +112,13 @@ JS
         $fragments = [
             'after' => $calendarData->renderWith(self::class),
         ];
-        
+
         if ($this->_togglePosition != 'after') {
             $fragments[$this->_togglePosition] = $gridField->renderWith(self::class . '_toggle');
         } else {
             $fragments['after'] = $gridField->renderWith(self::class . '_toggle')->getValue() . $fragments['after']->getValue();
         }
-        
+
         return $fragments;
     }
 
@@ -217,7 +221,7 @@ JS
     {
         return $this->_summaryField;
     }
-    
+
     /**
      * Sets the all day field name
      * @param {string} $field Name of the field to be used to determin if the field is an all day event result must be boolean like
@@ -228,7 +232,7 @@ JS
         $this->_allDayField = $field;
         return $this;
     }
-    
+
     /**
      * Gets the all day field used
      * @return {string}
@@ -240,7 +244,7 @@ JS
 
     /**
      * Gets the calendar options that are currently set
-     * 
+     *
      * @return {string}
      */
     public function getCustomOptions()
@@ -250,7 +254,7 @@ JS
 
     /**
      * Overwrite the custom calendar options
-     * 
+     *
      * @param {array} $data List of items to appear in the header
      * @return {GridFieldCalendarView}
      */
@@ -270,7 +274,7 @@ JS
             'calendar-data-feed' => 'handleCalendarFeed',
         ];
     }
-    
+
     /**
      * Handles retrieving the data for the calendar
      * @param {GridField} $gridField GridField instance
@@ -346,14 +350,14 @@ JS
             if (($event->hasMethod('isOnLiveOnly') && $event->isOnLiveOnly()) || ($event->hasMethod('isArchived') && $event->isArchived())) {
                 $deleted_event_class = 'deleted-event';
             }
-            
+
             $result[] = [
                 'title' => $event->{$this->_titleField},
                 'abstractText' => $event->{$this->_summaryField},
                 'allDay' => (bool) $event->{$this->_allDayField},
                 'start' => date('c', strtotime($event->{$this->_startDateField})),
                 'end' => date('c', strtotime($event->{$this->_endDateField})),
-                'url' => Controller::join_links($gridField->Link('item'), $event->ID, 'edit'),
+                'url' => $gridField->addAllStateToUrl(Controller::join_links($gridField->Link('item'), $event->ID, 'edit')),
                 'className' => $deleted_event_class,
             ];
         }

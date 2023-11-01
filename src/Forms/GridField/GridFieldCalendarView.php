@@ -14,7 +14,6 @@ use WebbuildersGroup\GridFieldDeletedItems\Forms\GridFieldDeletedManipulator;
 
 class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHandler
 {
-
     private $_startDateField;
     private $_endDateField;
     private $_togglePosition;
@@ -27,21 +26,21 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
      * 
      * @var array
      */
-    private $default_options = array(
-        "header" => array(
+    private $default_options = [
+        "header" => [
             "left" => 'title',
             "center" => '',
-            "right" => 'today prev,next'
-        ),
-        "footer" => false
-    );
+            "right" => 'today prev,next',
+        ],
+        "footer" => false,
+    ];
 
     /**
      * Overwrite the default options with your own settings
      * 
      * @var array
      */
-    private $custom_options = array();
+    private $custom_options = [];
 
     /**
      * Constructor
@@ -83,7 +82,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
         $params = http_build_query($request_vars);
 
         if (!empty($params)) {
-            $params = "?" . $params;
+            $params = '?' . $params;
         }
 
         $options = json_encode(array_merge(
@@ -91,12 +90,12 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
             $this->getCustomOptions()
         ));
 
-        $calendarData= ArrayData::create(array(
-            'FeedLink' => $gridField->Link('calendar-data-feed') . $params
-        ));
+        $calendarData= ArrayData::create([
+            'FeedLink' => $gridField->Link('calendar-data-feed') . $params,
+        ]);
 
         Requirements::customScript(<<<JS
-            var gridfield_calendar_data = $options
+            const gridfield_calendar_data = $options;
 JS
         );
 
@@ -107,10 +106,10 @@ JS
         Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/fullcalendar.min.js');
         Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/GridFieldCalendarView.js');
 
-        return array(
+        return [
             'after' => $calendarData->renderWith(self::class),
-            $this->_togglePosition => $gridField->renderWith(self::class.'_toggle')
-        );
+            $this->_togglePosition => $gridField->renderWith(self::class.'_toggle'),
+        ];
     }
 
     /**
@@ -120,7 +119,7 @@ JS
      */
     public function setStartDateField($field)
     {
-        $this->_startDateField=$field;
+        $this->_startDateField = $field;
         return $this;
     }
 
@@ -200,7 +199,7 @@ JS
      */
     public function setSummaryField($field)
     {
-        $this->_summaryField=$field;
+        $this->_summaryField = $field;
         return $this;
     }
 
@@ -220,8 +219,7 @@ JS
      */
     public function setAllDayField($field)
     {
-        $this->_allDayField=$field;
-        
+        $this->_allDayField = $field;
         return $this;
     }
     
@@ -262,9 +260,9 @@ JS
      */
     public function getURLHandlers($gridField)
     {
-        return array(
-            'calendar-data-feed'=>'handleCalendarFeed'
-        );
+        return [
+            'calendar-data-feed' => 'handleCalendarFeed',
+        ];
     }
     
     /**
@@ -335,7 +333,7 @@ JS
             ))->sort($this->_startDateField);
 
         //Build the response data
-        $result = array();
+        $result = [];
         foreach ($events as $event) {
             $deleted_event_class = null;
 
@@ -343,15 +341,15 @@ JS
                 $deleted_event_class = 'deleted-event';
             }
             
-            $result[] = array(
+            $result[] = [
                 'title' => $event->{$this->_titleField},
                 'abstractText' => $event->{$this->_summaryField},
                 'allDay' => (bool) $event->{$this->_allDayField},
                 'start' => date('c', strtotime($event->{$this->_startDateField})),
                 'end' => date('c', strtotime($event->{$this->_endDateField})),
                 'url' => Controller::join_links($gridField->Link('item'), $event->ID, 'edit'),
-                'className' => $deleted_event_class
-            );
+                'className' => $deleted_event_class,
+            ];
         }
 
         //Serialize to json

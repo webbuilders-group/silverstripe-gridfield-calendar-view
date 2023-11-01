@@ -8,8 +8,8 @@
                 this._super();
 
                 //Restore the selected button if the rembered state is calendar
-                var gridField = this.closest('.ss-gridfield');
-                var state = gridField.getState().GridFieldCalendarView;
+                const gridField = this.closest('.ss-gridfield');
+                const state = gridField.getState().GridFieldCalendarView;
                 if (state && state.view_mode == 'calendar') {
                     this.find('.calendar-view-list').parent().removeClass('active');
                     this.find('.calendar-view-month').parent().addClass('active');
@@ -27,7 +27,7 @@
                     return false;
                 }
 
-                var gridField = this.closest('.ss-gridfield');
+                const gridField = this.closest('.ss-gridfield');
 
                 //Remove all active
                 this.parent().siblings('.active').removeClass('active');
@@ -44,7 +44,7 @@
                     gridField.find('.ss-gridfield-table, .grid-field__table').show();
                 }
 
-                var state=gridField.getState().GridFieldCalendarView;
+                const state = gridField.getState().GridFieldCalendarView;
                 if (state) {
                     state.view_mode = this.attr('data-view-mode');
                 } else {
@@ -71,8 +71,8 @@
                 this._super();
                 
                 //Restore the calendar to the front if the rembered state says to
-                var gridField=this.closest('.ss-gridfield');
-                var state=gridField.getState().GridFieldCalendarView;
+                const gridField = this.closest('.ss-gridfield');
+                const state = gridField.getState().GridFieldCalendarView;
                 if(state && state.view_mode=='calendar') {
                     gridField.find('.ss-gridfield-table, .grid-field__table').hide();
                     this.show().redraw();
@@ -80,30 +80,30 @@
             },
 
             redraw: function() {
-                var self = this;
+                const self = this;
 
                 //If already rendered bail
                 if (this.getRendered()) {
                     return;
                 }
 
-                var gridField = this.closest('.ss-gridfield');
-                var state = gridField.getState().GridFieldCalendarView;
+                const gridField = this.closest('.ss-gridfield');
+                const state = gridField.getState().GridFieldCalendarView;
 
                 this.setGridFieldID(gridField.attr('id'));
 
                 /**** Bootstrap Calendar ****/
-                var calendar = self.find('.calendar-display');
-                var stateField = gridField.find('.gridstate');
-                var monthHop = false;
+                const calendar = self.find('.calendar-display');
+                const stateField = gridField.find('.gridstate');
+                const monthHop = false;
 
                 //Reload the start date from the grid state
-                var startDate = null;
+                let startDate = null;
                 if (state && state.start_date!='') {
-                    startDate=state.start_date;
+                    startDate = state.start_date;
                 }
 
-                var calendar_options = {
+                const calendar_options = {
                     editable: false,
                     eventLimit: true,
                     defaultDate: startDate,            
@@ -113,8 +113,8 @@
                         startParam: 'start-date',
                         endParam: 'end-date',
                         data: function() {
-                            var dataObj = {
-                                SecurityID: self.closest('form').find('input[name=SecurityID]').val()
+                            const dataObj = {
+                                SecurityID: self.closest('form').find('input[name=SecurityID]').val(),
                             };
                             dataObj[stateField.attr('name')] = stateField.val();
 
@@ -140,13 +140,13 @@
                      */
                     viewRender: function(view, element) {
                         if (monthHop) {
-                            var state = gridField.getState().GridFieldCalendarView;
+                            const state = gridField.getState().GridFieldCalendarView;
                             if (state) {
                                 //Store start date in the state
                                 if (view.start.format('D')==1) {
-                                    state.start_date=view.start.format('YYYY-MM-01');
+                                    state.start_date = view.start.format('YYYY-MM-01');
                                 } else {
-                                    state.start_date=view.start.clone().add(1, 'months').format('YYYY-MM-01');
+                                    state.start_date = view.start.clone().add(1, 'months').format('YYYY-MM-01');
                                 }
                                 gridField.setState('GridFieldCalendarView', state);
                             }
@@ -180,41 +180,41 @@
                      * @param {object} view Calendar View Object
                      */
                     eventMouseover: function(event, jsEvent, view) {
-                        var tip = $('#'+self.getGridFieldID()+'_calendar_tt'+event._id);
+                        const tip = $('#' + self.getGridFieldID() + '_calendar_tt' + event._id);
                         
                         if (tip.length == 0) {
                             tip = $('<div class="gridfield-calendar-tip"></div>');
-                            tip.attr('id', self.getGridFieldID()+'_calendar_tt'+event._id);
+                            tip.attr('id', self.getGridFieldID() + '_calendar_tt' + event._id);
                             tip.addClass(event.className.join(' '));
                             tip.append($('<p class="evt-title"/>').text(event.title));
                             
                             //Figure out the event range format
-                            var dateTimeStr = false;
+                            let dateTimeStr = false;
                             if (event.end) {
-                                var startMonth = event.start.format('MMM D');
-                                var startTime = event.start.format('h:mma');
-                                var endMonth = event.end.format('MMM D');
-                                var endTime = event.end.format('h:mma');
+                                const startMonth = event.start.format('MMM D');
+                                const startTime = event.start.format('h:mma');
+                                const endMonth = event.end.format('MMM D');
+                                const endTime = event.end.format('h:mma');
                                 
                                 if (startMonth == endMonth) {
-                                    dateTimeStr=startMonth;
+                                    dateTimeStr = startMonth;
                                     
                                     if (event.allDay==false) {
-                                        dateTimeStr+=' @ '+startTime+' - '+endTime;
+                                        dateTimeStr += ' @ '+startTime+' - '+endTime;
                                     }
                                 } else {
                                     dateTimeStr=startMonth+' - '+endMonth;
                                     
-                                    if (event.allDay==false) {
-                                        if (startTime==endTime) {
-                                            dateTimeStr+=' @ '+startTime;
+                                    if (event.allDay == false) {
+                                        if (startTime == endTime) {
+                                            dateTimeStr += ' @ '+startTime;
                                         } else {
-                                            dateTimeStr+=' @ '+startTime+' - '+endTime;
+                                            dateTimeStr += ' @ '+startTime+' - '+endTime;
                                         }
                                     }
                                 }
                             } else {
-                                dateTimeStr=event.start.format('MMM D @ h:mma');
+                                dateTimeStr = event.start.format('MMM D @ h:mma');
                             }
 
                             if (dateTimeStr) {
@@ -230,11 +230,11 @@
                             $(document.body).append(tip);
                         }
 
-                        var element=$(jsEvent.currentTarget);
-                        var elementPos=element.offset();
+                        const element = $(jsEvent.currentTarget);
+                        const elementPos = element.offset();
                         tip
-                            .css('left', ((elementPos.left+(element.outerWidth()/2))-161)+'px')
-                            .css('top', (elementPos.top+element.outerHeight())+'px')
+                            .css('left', ((elementPos.left + (element.outerWidth() / 2)) - 161) + 'px')
+                            .css('top', (elementPos.top + element.outerHeight()) + 'px')
                             .show();
                     },
 
@@ -245,8 +245,8 @@
                      * @param {object} view Calendar View Object
                      */
                     eventMouseout: function(event, jsEvent, view) {
-                        var tip=$('#'+self.getGridFieldID()+'_calendar_tt'+event._id);
-                        if(tip.length > 0) {
+                        const tip = $('#' + self.getGridFieldID() + '_calendar_tt' + event._id);
+                        if (tip.length > 0) {
                             tip.hide();
                         }
                     }
@@ -254,7 +254,7 @@
 
                 // Merge calendar defaults with custom options (if available)
                 if (typeof gridfield_calendar_data !== 'undefined') {
-                    for (var key in gridfield_calendar_data) {
+                    for (let key in gridfield_calendar_data) {
                         calendar_options[key] = gridfield_calendar_data[key];
                     }
                 }

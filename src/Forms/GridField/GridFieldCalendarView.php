@@ -9,6 +9,7 @@ use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridField_StateProvider;
 use SilverStripe\Forms\GridField\GridField_URLHandler;
+use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridState_Data;
 use SilverStripe\Security\SecurityToken;
 use SilverStripe\View\ArrayData;
@@ -345,14 +346,8 @@ JS
         }
 
         // Fetch the month's events
-        $list = $gridField->getList();
-        $deletedManip = $gridField
-            ->getConfig()
-            ->getComponentByType(GridFieldDeletedManipulator::class);
-
-        if ($deletedManip) {
-            $list = $deletedManip->getManipulatedData($gridField, $list);
-        }
+        $gridField->getConfig()->removeComponentsByType(GridFieldPaginator::class);
+        $list = $gridField->getManipulatedList();
 
         $events = $list
             ->filter(array(

@@ -189,8 +189,7 @@
                      * @param {object} view Calendar View Object
                      */
                     eventMouseover: function(event, jsEvent, view) {
-                        const tip = $('#' + self.getGridFieldID() + '_calendar_tt' + event._id);
-
+                        let tip = $('#' + self.getGridFieldID() + '_calendar_tt' + event._id);
                         if (tip.length == 0) {
                             tip = $('<div class="gridfield-calendar-tip"></div>');
                             tip.attr('id', self.getGridFieldID() + '_calendar_tt' + event._id);
@@ -208,22 +207,22 @@
                                 if (startMonth == endMonth) {
                                     dateTimeStr = startMonth;
 
-                                    if (event.allDay==false) {
-                                        dateTimeStr += ' @ '+startTime+' - '+endTime;
+                                    if (event.allDay == false) {
+                                        dateTimeStr += ' @ ' + startTime + ' - ' + endTime;
                                     }
                                 } else {
-                                    dateTimeStr=startMonth+' - '+endMonth;
+                                    dateTimeStr = startMonth + ' - ' + endMonth;
 
                                     if (event.allDay == false) {
                                         if (startTime == endTime) {
-                                            dateTimeStr += ' @ '+startTime;
+                                            dateTimeStr += ' @ ' + startTime;
                                         } else {
-                                            dateTimeStr += ' @ '+startTime+' - '+endTime;
+                                            dateTimeStr += ' @ ' + startTime + ' - ' + endTime;
                                         }
                                     }
                                 }
                             } else {
-                                dateTimeStr = event.start.format('MMM D @ h:mma');
+                                dateTimeStr = event.start.format('MMM D' + (!event.allDay ? ' @ h:mma' : ''));
                             }
 
                             if (dateTimeStr) {

@@ -44,7 +44,7 @@
                     gridField.find('.ss-gridfield-table, .grid-field__table').show();
                 }
 
-                const state = gridField.getState().GridFieldCalendarView;
+                let state = gridField.getState().GridFieldCalendarView;
                 if (state) {
                     state.view_mode = this.attr('data-view-mode');
                 } else {
@@ -69,7 +69,7 @@
 
             onadd: function() {
                 this._super();
-                
+
                 //Restore the calendar to the front if the rembered state says to
                 const gridField = this.closest('.ss-gridfield');
                 const state = gridField.getState().GridFieldCalendarView;
@@ -106,7 +106,7 @@
                 const calendar_options = {
                     editable: false,
                     eventLimit: true,
-                    defaultDate: startDate,            
+                    defaultDate: startDate,
                     events: {
                         url: self.attr('data-calendar-feed'),
                         type: 'POST',
@@ -181,13 +181,13 @@
                      */
                     eventMouseover: function(event, jsEvent, view) {
                         const tip = $('#' + self.getGridFieldID() + '_calendar_tt' + event._id);
-                        
+
                         if (tip.length == 0) {
                             tip = $('<div class="gridfield-calendar-tip"></div>');
                             tip.attr('id', self.getGridFieldID() + '_calendar_tt' + event._id);
                             tip.addClass(event.className.join(' '));
                             tip.append($('<p class="evt-title"/>').text(event.title));
-                            
+
                             //Figure out the event range format
                             let dateTimeStr = false;
                             if (event.end) {
@@ -195,16 +195,16 @@
                                 const startTime = event.start.format('h:mma');
                                 const endMonth = event.end.format('MMM D');
                                 const endTime = event.end.format('h:mma');
-                                
+
                                 if (startMonth == endMonth) {
                                     dateTimeStr = startMonth;
-                                    
+
                                     if (event.allDay==false) {
                                         dateTimeStr += ' @ '+startTime+' - '+endTime;
                                     }
                                 } else {
                                     dateTimeStr=startMonth+' - '+endMonth;
-                                    
+
                                     if (event.allDay == false) {
                                         if (startTime == endTime) {
                                             dateTimeStr += ' @ '+startTime;
@@ -260,15 +260,15 @@
                 }
 
                 calendar.fullCalendar(calendar_options);
-                
+
                 this.setRendered(true);
             }
         });
-        
+
         $('.ss-gridfield .ss-gridfield-calendar .fc-prev-button, .ss-gridfield .ss-gridfield-calendar .fc-next-button').entwine({
             onmatch: function() {
                 this._super();
-                
+
                 this.addClass('btn')
                     .addClass('btn-outline-secondary')
                     .removeClass('fc-button')

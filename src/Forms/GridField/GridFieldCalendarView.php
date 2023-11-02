@@ -1,20 +1,23 @@
 <?php
 namespace WebbuildersGroup\GridFieldCalendarView\Forms\GridField;
 
+use InvalidArgumentException;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Forms\GridField\AbstractGridFieldComponent;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
+use SilverStripe\Forms\GridField\GridField_StateProvider;
 use SilverStripe\Forms\GridField\GridField_URLHandler;
+use SilverStripe\Forms\GridField\GridState_Data;
 use SilverStripe\Security\SecurityToken;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 use WebbuildersGroup\GridFieldDeletedItems\Forms\GridFieldDeletedManipulator;
 
 
-class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHandler
+class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHandler, GridField_StateProvider
 {
     use Injectable;
 
@@ -24,6 +27,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     private $_titleField;
     private $_summaryField;
     private $_allDayField;
+    private $_defaultViewMode = 'default';
 
     /**
      * Default options for the FullCalendar instance
@@ -40,19 +44,18 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
 
     /**
      * Overwrite the default options with your own settings
-     *
      * @var array
      */
     private $custom_options = [];
 
     /**
      * Constructor
-     * @param {string} $startDateField Name of the Start Date field
-     * @param {string} $endDateField Name of the End Date field
-     * @param {string} $togglePosition Position of the toggle controls
-     * @param {string} $titleField Name of the field to be used for the title in the calendar
-     * @param {string} $summaryField Name of the field to be used for the summary in the calendar
-     * @param {string} $allDayField Name of the field to be used to determin if the field is an all day event result must be boolean like
+     * @param string $startDateField Name of the Start Date field
+     * @param string $endDateField Name of the End Date field
+     * @param string $togglePosition Position of the toggle controls
+     * @param string $titleField Name of the field to be used for the title in the calendar
+     * @param string $summaryField Name of the field to be used for the summary in the calendar
+     * @param string $allDayField Name of the field to be used to determin if the field is an all day event result must be boolean like
      */
     public function __construct($startDateField, $endDateField, $togglePosition = 'buttons-before-left', $titleField = 'Title', $summaryField = 'Summary', $allDayField = 'IsAllDay')
     {
@@ -66,7 +69,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
 
     /**
      * Returns a map where the keys are fragment names and the values are pieces of HTML to add to these fragments.
-     * @return {array}
+     * @return array
      */
     public function getHTMLFragments($gridField)
     {
@@ -124,8 +127,8 @@ JS
 
     /**
      * Sets the start date/time field name
-     * @param {string} $field Name of the field to be used for the start date/time, this must match the model it cannot be a getter
-     * @return {GridFieldCalendarView}
+     * @param string $field Name of the field to be used for the start date/time, this must match the model it cannot be a getter
+     * @return static
      */
     public function setStartDateField($field)
     {
@@ -135,7 +138,7 @@ JS
 
     /**
      * Gets the start date/time field used
-     * @return {string}
+     * @return string
      */
     public function getStartDateField()
     {
@@ -144,8 +147,8 @@ JS
 
     /**
      * Sets the end date/time field name
-     * @param {string} $field Name of the field to be used for the end date/time
-     * @return {GridFieldCalendarView}
+     * @param string $field Name of the field to be used for the end date/time
+     * @return static
      */
     public function setEndDateField($field)
     {
@@ -155,7 +158,7 @@ JS
 
     /**
      * Gets the end date/time field used
-     * @return {string}
+     * @return string
      */
     public function getEndDateField()
     {
@@ -164,8 +167,8 @@ JS
 
     /**
      * Sets the position of the list/calendar toggle button
-     * @param {string} $location Location for the component to be added to the GridField
-     * @return {GridFieldCalendarView}
+     * @param string $location Location for the component to be added to the GridField
+     * @return static
      */
     public function setTogglePosition($location)
     {
@@ -175,7 +178,7 @@ JS
 
     /**
      * Gets the position of the list/calendar toggle button
-     * @return {string}
+     * @return string
      */
     public function getTogglePosition()
     {
@@ -184,8 +187,8 @@ JS
 
     /**
      * Sets the title field name
-     * @param {string} $field Name of the field to be used for the title in the calendar
-     * @return {GridFieldCalendarView}
+     * @param string $field Name of the field to be used for the title in the calendar
+     * @return static
      */
     public function setTitleField($field)
     {
@@ -195,7 +198,7 @@ JS
 
     /**
      * Gets the title field used
-     * @return {string}
+     * @return string
      */
     public function getTitleField()
     {
@@ -204,8 +207,8 @@ JS
 
     /**
      * Sets the summary field name
-     * @param {string} $field Name of the field to be used for the summary in the calendar
-     * @return {GridFieldCalendarView}
+     * @param string $field Name of the field to be used for the summary in the calendar
+     * @return static
      */
     public function setSummaryField($field)
     {
@@ -215,7 +218,7 @@ JS
 
     /**
      * Gets the summary field used
-     * @return {string}
+     * @return string
      */
     public function getSummaryField()
     {
@@ -224,8 +227,8 @@ JS
 
     /**
      * Sets the all day field name
-     * @param {string} $field Name of the field to be used to determin if the field is an all day event result must be boolean like
-     * @return {GridFieldCalendarView}
+     * @param string $field Name of the field to be used to determin if the field is an all day event result must be boolean like
+     * @return static
      */
     public function setAllDayField($field)
     {
@@ -235,7 +238,7 @@ JS
 
     /**
      * Gets the all day field used
-     * @return {string}
+     * @return string
      */
     public function getAllDayField()
     {
@@ -243,20 +246,9 @@ JS
     }
 
     /**
-     * Gets the calendar options that are currently set
-     *
-     * @return {string}
-     */
-    public function getCustomOptions()
-    {
-        return $this->custom_options;
-    }
-
-    /**
      * Overwrite the custom calendar options
-     *
-     * @param {array} $data List of items to appear in the header
-     * @return {GridFieldCalendarView}
+     * @param array $data List of items to appear in the header
+     * @return static
      */
     public function setCustomOptions($options)
     {
@@ -265,8 +257,42 @@ JS
     }
 
     /**
+     * Gets the calendar options that are currently set
+     * @return string
+     */
+    public function getCustomOptions()
+    {
+        return $this->custom_options;
+    }
+
+    /**
+     * Sets the default view mode
+     * @param array $view View mode to default to (default or calendar)
+     * @return static
+     * @throws InvalidArgumentException
+     */
+    public function setDefaultView($view)
+    {
+        if (!in_array($view, ['default', 'calendar'])) {
+            throw new InvalidArgumentException('View mode "' . $view . '" is not an expected option, valid options are "default" and "calendar"');
+        }
+
+        $this->_defaultViewMode = $view;
+        return $this;
+    }
+
+    /**
+     * Gets the default view mode
+     * @return string
+     */
+    public function getDefaultViews()
+    {
+        return $this->_defaultViewMode;
+    }
+
+    /**
      * Return URLs to be handled by this grid field component, in an array the same form as $url_handlers.
-     * @return {array}
+     * @return array
      */
     public function getURLHandlers($gridField)
     {
@@ -277,23 +303,23 @@ JS
 
     /**
      * Handles retrieving the data for the calendar
-     * @param {GridField} $gridField GridField instance
-     * @param {SS_HTTPRequest} $request HTTP Request Object
-     * @return {string} Response JSON
+     * @param GridField $gridField GridField instance
+     * @param HTTPRequest $request HTTP Request Object
+     * @return string Response JSON
      */
     public function handleCalendarFeed(GridField $gridField, HTTPRequest $request)
     {
-        //Validate Security Token
+        // Validate Security Token
         if (!SecurityToken::inst()->checkRequest($request)) {
             return Controller::curr()
                 ->httpError(403, 'Security Token Expired or Invalid');
         }
 
-        //Figure out the start date
+        // Figure out the start date
         $startTS = strtotime($request->postVar('start-date'));
 
         if ($request->postVar('start-date') && $startTS !== false) {
-            //Push the date into the next month if the first visible day on the calendar is not 1
+            // Push the date into the next month if the first visible day on the calendar is not 1
             if (date('j', $startTS) !=1) {
                 $startDate = date('Y-m-01', strtotime(date('Y-m-01', $startTS).' next month'));
             } else {
@@ -303,11 +329,11 @@ JS
             $startDate = date('Y-m-01');
         }
 
-        //Figure out the end date
+        // Figure out the end date
         $endTS = strtotime($request->postVar('end-date'));
 
         if ($request->postVar('end-date') && $endTS !== false) {
-            //Push the date into the previous month if the last visible day on the calendar is less then 28
+            // Push the date into the previous month if the last visible day on the calendar is less then 28
             if (date('j', $endTS) < 28) {
                 $endDate = date(
                     'Y-m-t',
@@ -320,7 +346,7 @@ JS
             $endDate = date('Y-m-t');
         }
 
-        //Fetch the month's events
+        // Fetch the month's events
         $list = $gridField->getList();
         $deletedManip = $gridField
             ->getConfig()
@@ -342,7 +368,7 @@ JS
                 )
             ))->sort($this->_startDateField);
 
-        //Build the response data
+        // Build the response data
         $result = [];
         foreach ($events as $event) {
             $deleted_event_class = null;
@@ -362,12 +388,21 @@ JS
             ];
         }
 
-        //Serialize to json
+        // Serialize to json
         $result = json_encode($result);
 
-        //Respond with the resulting json
+        // Respond with the resulting json
         $response = Controller::curr()->getResponse();
         $response->addHeader('Content-Type', 'application/json; charset=utf-8');
         return $result;
+    }
+
+    /**
+     * Initialise the default state in the given GridState_Data
+     * @param GridState_Data $data The top-level state object
+     */
+    public function initDefaultState(GridState_Data $data): void
+    {
+        $data->GridFieldCalendarView->initDefaults(['view_mode' => $this->_defaultViewMode]);
     }
 }

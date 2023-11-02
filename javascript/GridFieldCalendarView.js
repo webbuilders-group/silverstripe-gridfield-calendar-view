@@ -16,7 +16,7 @@
 
                     gridField.find('.ss-gridfield-table, .grid-field__table').hide();
                     gridField.find('.ss-gridfield-calendar').show().redraw();
-                } else if (!state && this.attr('data-default-view-mode') == 'calendar') {
+                } else if ((!state || !state.view_mode) && this.attr('data-default-view-mode') == 'calendar') {
                     this.find('.calendar-view-list').parent().removeClass('active');
                     this.find('.calendar-view-month').parent().addClass('active');
 

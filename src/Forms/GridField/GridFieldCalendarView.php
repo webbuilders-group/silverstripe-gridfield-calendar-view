@@ -5,7 +5,6 @@ use InvalidArgumentException;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injectable;
-use SilverStripe\Forms\GridField\AbstractGridFieldComponent;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridField_StateProvider;
@@ -15,7 +14,6 @@ use SilverStripe\Security\SecurityToken;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 use WebbuildersGroup\GridFieldDeletedItems\Forms\GridFieldDeletedManipulator;
-
 
 class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHandler, GridField_StateProvider
 {
@@ -69,11 +67,11 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
 
     /**
      * Returns a map where the keys are fragment names and the values are pieces of HTML to add to these fragments.
+     * @param GridField $gridField Grid field the fragments are being added to
      * @return array
      */
     public function getHTMLFragments($gridField)
     {
-        $dataList = $gridField->getList();
         $controller = Controller::curr();
 
         // Get the current query string and and to the request
@@ -117,9 +115,9 @@ JS
         ];
 
         if ($this->_togglePosition != 'after') {
-            $fragments[$this->_togglePosition] = $gridField->renderWith(self::class . '_toggle');
+            $fragments[$this->_togglePosition] = $gridField->customise(['DefaultViewMode' => $this->_defaultViewMode])->renderWith(self::class . '_toggle');
         } else {
-            $fragments['after'] = $gridField->renderWith(self::class . '_toggle')->getValue() . $fragments['after']->getValue();
+            $fragments['after'] = $gridField->customise(['DefaultViewMode' => $this->_defaultViewMode])->renderWith(self::class . '_toggle')->getValue() . $fragments['after']->getValue();
         }
 
         return $fragments;

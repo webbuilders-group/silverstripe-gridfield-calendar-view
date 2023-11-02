@@ -1,0 +1,7 @@
+---
+Name: gridfieldcalendarview
+After: "silverstripe/framework#*"
+---
+SilverStripe\Forms\GridField\GridField:
+  default_readonly_components:
+    - 'WebbuildersGroup\GridFieldCalendarView\Forms\GridField\GridFieldCalendarView'

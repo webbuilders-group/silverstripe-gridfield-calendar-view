@@ -1,5 +1,8 @@
 # Change Log
 
+## [2.1.3](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/tree/2.1.3) (2023-11-03)
+[Full Changelog](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/compare/2.1.2...2.1.3)
+
 ## [2.1.2](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/tree/2.1.2) (2023-11-02)
 [Full Changelog](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/compare/2.1.1...2.1.2)
 

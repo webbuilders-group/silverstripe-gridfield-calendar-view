@@ -104,7 +104,7 @@
                 /**** Bootstrap Calendar ****/
                 const calendar = self.find('.calendar-display');
                 const stateField = gridField.find('.gridstate');
-                const monthHop = false;
+                let monthHop = false;
 
                 //Reload the start date from the grid state
                 let startDate = null;

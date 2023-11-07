@@ -156,6 +156,11 @@
     background: #FFFFFF;
 }
 
+.ss-gridfield-calendar .calendar-display .fc-header-toolbar {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .ss-gridfield-calendar .calendar-display .fc-footer-toolbar {
     background-image: linear-gradient(#B0BEC7, #98AAB6);
     display: block;

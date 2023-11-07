@@ -369,7 +369,7 @@ JS
                 $deleted_event_class = 'deleted-event';
             }
 
-            $result[] = [
+            $data = [
                 'id' => $event->ID,
                 'title' => $event->{$this->_titleField},
                 'allDay' => (bool) $event->{$this->_allDayField},
@@ -381,6 +381,10 @@ JS
                     'className' => $deleted_event_class,
                 ],
             ];
+
+            $event->invokeWithExtensions('updateGridFieldCalendarData', $data);
+
+            $result[] = $data;
         }
 
         // Respond with the resulting json

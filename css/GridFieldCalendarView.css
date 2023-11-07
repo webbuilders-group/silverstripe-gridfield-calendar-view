@@ -1,3 +1,16 @@
+:root {
+    --fc-button-bg-color: rgba(0, 0, 0, 0);
+    --fc-button-border-color: #cdccd0;
+    --fc-button-text-color: #43536d;
+    --fc-button-hover-bg-color: #d4dbe1;
+    --fc-button-hover-border-color: #cdccd0;
+    --fc-button-active-bg-color: #d4dbe1;
+    --fc-button-active-border-color: #cdccd0;
+    --fc-event-bg-color: #358FC3;
+    --fc-event-border-color: #358FC3;
+    --fc-today-bg-color: #F0F2F4;
+}
+
 /**** Calendar View Toggle ****/
 .calendar-view-mode-toggle {
     border: 1px solid #CDCCD0;
@@ -82,6 +95,7 @@
     clear: both;
     position: relative;
     padding-bottom: 80.7%;
+    overflow: hidden;
 }
 
 .ss-gridfield-calendar .calendar-display {
@@ -96,6 +110,8 @@
 }
 
 .ss-gridfield-calendar .calendar-display .fc-toolbar .fc-prev-button {
+    margin-right: 0;
+
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
@@ -107,10 +123,10 @@
 
 .ss-gridfield-calendar .calendar-display .fc-toolbar .fc-button .fc-icon {
     top: 0;
-    
+
     margin: 0;
     padding: 0 8px;
-    
+
     height: 25px;
     line-height: 25px;
 }
@@ -140,10 +156,6 @@
     background: #FFFFFF;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-today {
-    background: #F0F2F4;
-}
-
 .ss-gridfield-calendar .calendar-display .fc-footer-toolbar {
     background-image: linear-gradient(#B0BEC7, #98AAB6);
     display: block;
@@ -163,42 +175,39 @@
     color: #FFFFFF;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-head div.fc-widget-header, .ss-gridfield-calendar .calendar-display .fc-head td.fc-widget-header, .ss-gridfield-calendar .calendar-display thead {
-    border: 0;
+.ss-gridfield-calendar .calendar-display .fc-col-header {
+    background: #F7F8FA;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-head .fc-widget-header th {
-    background: #F7F8FA;
-    
-    font-weight: normal;
-    
-    border-top: 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    border-right: 0;
-    
+.ss-gridfield-calendar .calendar-display .fc-col-header .fc-col-header-cell {
     padding: 0.8308rem 1.2308rem;
-    
+
     vertical-align: middle;
-    
+
     white-space: nowrap;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-head .fc-widget-header th:first-child {
-    border-left: 0;
+.ss-gridfield-calendar .calendar-display .fc-h-event {
+    font-size: 1rem;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-body > tr > .fc-widget-content,
-.ss-gridfield-calendar .calendar-display .fc-body .fc-day-grid .fc-week:nth-child(1) .fc-widget-content {
-    border-top: 0;
-}
-
-.ss-gridfield-calendar .calendar-display .fc-day-grid-event {
-    background: #358FC3;
-    font-size: 14px;
-}
-
-.ss-gridfield-calendar .calendar-display .fc-day-grid-event.deleted-event {
+.ss-gridfield-calendar .calendar-display .fc-h-event.deleted-event {
     text-decoration: line-through;
+}
+
+.ss-gridfield-calendar .calendar-display .fc-col-header-cell a,
+.ss-gridfield-calendar .calendar-display .fc-daygrid-day-number {
+    color: #43536d;
+
+    text-decoration: none;
+}
+
+.ss-gridfield-calendar .calendar-display .fc-day-other .fc-h-event {
+    opacity: 0.3;
+}
+
+.ss-gridfield-calendar .calendar-display .fc-day-other .fc-h-event:hover {
+    opacity: 1;
 }
 
 .gridfield-calendar-tip {
@@ -212,6 +221,8 @@
     border: 1px solid #CCCCCC;
     border-radius: 4px;
     box-shadow: 2px 3px 4px 0px rgba(0, 0, 0, 0.2);
+    transform: translateX(-50%);
+    z-index: 10000;
 }
 
 .gridfield-calendar-tip:after, .gridfield-calendar-tip:before {
@@ -223,6 +234,7 @@
     height: 0;
     width: 0;
     pointer-events: none;
+    z-index: 10001;
 }
 
 .gridfield-calendar-tip:after {

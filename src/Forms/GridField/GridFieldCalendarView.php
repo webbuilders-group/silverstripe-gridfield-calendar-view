@@ -33,12 +33,12 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
      * @var array
      */
     private $default_options = [
-        "header" => [
+        "headerToolbar" => [
             "left" => 'title',
             "center" => '',
             "right" => 'today prev,next',
         ],
-        "footer" => false,
+        "footerToolbar" => false,
     ];
 
     /**
@@ -104,11 +104,10 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
 JS
         );
 
-        Requirements::css('webbuilders-group/silverstripe-gridfield-calendar-view:css/fullcalendar.min.css');
         Requirements::css('webbuilders-group/silverstripe-gridfield-calendar-view:css/GridFieldCalendarView.css');
 
-        Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/moment.min.js');
         Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/fullcalendar.min.js');
+        Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/fullcalendar-moment.min.js');
         Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/GridFieldCalendarView.js');
 
         $fragments = [
@@ -371,23 +370,23 @@ JS
             }
 
             $result[] = [
+                'id' => $event->ID,
                 'title' => $event->{$this->_titleField},
-                'abstractText' => $event->{$this->_summaryField},
                 'allDay' => (bool) $event->{$this->_allDayField},
                 'start' => date('c', strtotime($event->{$this->_startDateField})),
                 'end' => date('c', strtotime($event->{$this->_endDateField})),
                 'url' => $gridField->addAllStateToUrl(Controller::join_links($gridField->Link('item'), $event->ID, 'edit')),
-                'className' => $deleted_event_class,
+                'extendedProps' => [
+                    'abstractText' => $event->{$this->_summaryField},
+                    'className' => $deleted_event_class,
+                ],
             ];
         }
-
-        // Serialize to json
-        $result = json_encode($result);
 
         // Respond with the resulting json
         $response = Controller::curr()->getResponse();
         $response->addHeader('Content-Type', 'application/json; charset=utf-8');
-        return $result;
+        return json_encode($result);
     }
 
     /**

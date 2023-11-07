@@ -1,10 +1,10 @@
-(function($) {
-    $.entwine('ss', function($) {
+(function ($) {
+    $.entwine('ss', ($) => {
         /**
          * Calendar Toggle Component
          */
         $('.ss-gridfield .calendar-view-mode-toggle').entwine({
-            onadd: function() {
+            onadd: function () {
                 this._super();
 
                 //Restore the selected button if the rembered state is calendar
@@ -30,7 +30,7 @@
          * Calendar Toggle Component items
          */
         $('.ss-gridfield .calendar-view-mode-toggle li a').entwine({
-            onclick: function(e) {
+            onclick: function () {
                 //If already active do nothing
                 if (this.parent().hasClass('active')) {
                     return false;
@@ -75,24 +75,29 @@
         $('.ss-gridfield .ss-gridfield-calendar').entwine({
             GridFieldID: null,
             Rendered: false,
+            FullCalendar: null,
 
-            onadd: function() {
+            onadd: function () {
                 this._super();
 
                 //Restore the calendar to the front if the rembered state says to
                 const gridField = this.closest('.ss-gridfield');
                 const state = gridField.getState().GridFieldCalendarView;
-                if(state && state.view_mode=='calendar') {
+                if (state && state.view_mode == 'calendar') {
                     gridField.find('.ss-gridfield-table, .grid-field__table').hide();
                     this.show().redraw();
                 }
             },
 
-            redraw: function() {
+            redraw: function () {
                 const self = this;
 
                 //If already rendered bail
                 if (this.getRendered()) {
+                    const fullCalendar = this.getFullCalendar();
+                    fullCalendar.updateSize();
+                    fullCalendar.render();
+
                     return;
                 }
 
@@ -113,15 +118,14 @@
                 }
 
                 const calendar_options = {
-                    editable: false,
-                    eventLimit: true,
-                    defaultDate: startDate,
+                    dayMaxEventRows: true,
+                    initialDate: startDate,
                     events: {
                         url: self.attr('data-calendar-feed'),
-                        type: 'POST',
+                        method: 'POST',
                         startParam: 'start-date',
                         endParam: 'end-date',
-                        data: function() {
+                        extraParams: () => {
                             const dataObj = {
                                 SecurityID: self.closest('form').find('input[name=SecurityID]').val(),
                             };
@@ -129,7 +133,7 @@
 
                             return dataObj;
                         },
-                        error: function() {
+                        failure: () => {
                             jQuery.noticeAdd({
                                 text: 'Error loading calendar, please try again later',
                                 type: 'error',
@@ -137,7 +141,7 @@
                                 inEffect: {left: '0', opacity: 'show'}
                             });
                         },
-                        className: 'cms-panel-link'
+                        className: 'cms-panel-link',
                     },
                     buttonIcons: {
                         prev: ' font-icon-left-open-big',
@@ -146,17 +150,19 @@
 
                     /**
                      * Handles when the view is rendered
+                     * @param {object} view Calendar View Object
                      */
-                    viewRender: function(view, element) {
+                    viewDidMount: (view) => {
                         if (monthHop) {
                             const state = gridField.getState().GridFieldCalendarView;
                             if (state) {
                                 //Store start date in the state
-                                if (view.start.format('D')==1) {
+                                if (view.start.format('D') == 1) {
                                     state.start_date = view.start.format('YYYY-MM-01');
                                 } else {
                                     state.start_date = view.start.clone().add(1, 'months').format('YYYY-MM-01');
                                 }
+
                                 gridField.setState('GridFieldCalendarView', state);
                             }
                             monthHop = false;
@@ -165,10 +171,8 @@
 
                     /**
                      * Handles when the view is destroyed
-                     * @param {object} view Calendar View Object
-                     * @param {object} element jQuery object representing the view
                      */
-                    viewDestroy: function(view, element) {
+                    viewWillUnmount: () => {
                         //Remove all calendar tips
                         $('.gridfield-calendar-tip').remove();
                         monthHop = true;
@@ -178,42 +182,59 @@
                      * Handles when the the loading state for the calendar changes
                      * @param {boolean} isLoading Whether or not the event calendar is loading or not
                      */
-                    loading: function(isLoading) {
+                    loading: (isLoading) => {
                         self.closest('form').toggleClass('loading', isLoading);
                     },
 
                     /**
-                     * Shows/Creates a tooltip when the mouse is over an event item
-                     * @param {object} event Calendar Event Object
-                     * @param {MouseEvent} jsEvent JavaScript Mouse Event
-                     * @param {object} view Calendar View Object
+                     * Adds classes to the calendar event
+                     * @param {object} details Calendar Event Details Object
+                     * @returns {string[]}
                      */
-                    eventMouseover: function(event, jsEvent, view) {
-                        let tip = $('#' + self.getGridFieldID() + '_calendar_tt' + event._id);
+                    eventClassNames: (details) => {
+                        if (details.event.extendedProps.className) {
+                            return [details.event.extendedProps.className];
+                        }
+
+                        return [];
+                    },
+
+                    /**
+                     * Shows/Creates a tooltip when the mouse is over an event item
+                     * @param {object} details Calendar Event Details Object
+                     */
+                    eventMouseEnter: (details) => {
+                        let tip = $('#' + self.getGridFieldID() + '_calendar_tt' + details.event.id);
                         if (tip.length == 0) {
                             tip = $('<div class="gridfield-calendar-tip"></div>');
-                            tip.attr('id', self.getGridFieldID() + '_calendar_tt' + event._id);
-                            tip.addClass(event.className.join(' '));
-                            tip.append($('<p class="evt-title"/>').text(event.title));
+                            tip.attr('id', self.getGridFieldID() + '_calendar_tt' + details.event.id);
+
+                            if (details.event.extendedProps.className) {
+                                tip.addClass(details.event.extendedProps.className.join(' '));
+                            }
+
+                            tip.append($('<p class="evt-title"/>').text(details.event.title));
 
                             //Figure out the event range format
                             let dateTimeStr = false;
-                            if (event.end) {
-                                const startMonth = event.start.format('MMM D');
-                                const startTime = event.start.format('h:mma');
-                                const endMonth = event.end.format('MMM D');
-                                const endTime = event.end.format('h:mma');
+                            const startDate = FullCalendar.Moment.toMoment(details.event.start, this.getFullCalendar());
+                            if (details.event.end) {
+                                const endDate = FullCalendar.Moment.toMoment(details.event.end, this.getFullCalendar());
+                                const startMonth = startDate.format('MMM D');
+                                const startTime = startDate.format('h:mma');
+                                const endMonth = endDate.format('MMM D');
+                                const endTime = endDate.format('h:mma');
 
                                 if (startMonth == endMonth) {
                                     dateTimeStr = startMonth;
 
-                                    if (event.allDay == false) {
+                                    if (details.event.allDay == false) {
                                         dateTimeStr += ' @ ' + startTime + ' - ' + endTime;
                                     }
                                 } else {
                                     dateTimeStr = startMonth + ' - ' + endMonth;
 
-                                    if (event.allDay == false) {
+                                    if (details.event.allDay == false) {
                                         if (startTime == endTime) {
                                             dateTimeStr += ' @ ' + startTime;
                                         } else {
@@ -222,42 +243,46 @@
                                     }
                                 }
                             } else {
-                                dateTimeStr = event.start.format('MMM D' + (!event.allDay ? ' @ h:mma' : ''));
+                                dateTimeStr = startDate.format('MMM D' + (!details.event.allDay ? ' @ h:mma' : ''));
                             }
 
                             if (dateTimeStr) {
                                 tip.append($('<p class="evt-time-range"/>').text(dateTimeStr));
                             }
 
-                            if (event.abstractText) {
+                            if (details.event.extendedProps.abstractText) {
                                 tip.append('<hr />');
-                                tip.append($('<p class="evt-abstract"/>').text(event.abstractText));
+                                tip.append($('<p class="evt-abstract"/>').text(details.event.extendedProps.abstractText));
                             }
 
                             //Append to the dom
-                            $(document.body).append(tip);
+                            self.append(tip);
                         }
 
-                        const element = $(jsEvent.currentTarget);
+                        const calendarOffset = calendar.offset();
+                        const element = $(details.el);
                         const elementPos = element.offset();
                         tip
-                            .css('left', ((elementPos.left + (element.outerWidth() / 2)) - 161) + 'px')
-                            .css('top', (elementPos.top + element.outerHeight()) + 'px')
+                            .css('left', ((elementPos.left - calendarOffset.left) + (element.outerWidth() / 2)) + 'px')
+                            .css('top', ((elementPos.top - calendarOffset.top) + element.outerHeight()) + 'px')
                             .show();
                     },
 
                     /**
                      * Hides the tooltip when the mouse leaves an event item
-                     * @param {object} event Calendar Event Object
-                     * @param {MouseEvent} jsEvent JavaScript Mouse Event
-                     * @param {object} view Calendar View Object
+                     * @param {object} details Calendar Event Details Object
                      */
-                    eventMouseout: function(event, jsEvent, view) {
-                        const tip = $('#' + self.getGridFieldID() + '_calendar_tt' + event._id);
+                    eventMouseLeave: (details) => {
+                        const tip = $('#' + self.getGridFieldID() + '_calendar_tt' + details.event.id);
                         if (tip.length > 0) {
                             tip.hide();
                         }
-                    }
+                    },
+                    views: {
+                        dayGridMonth: {
+                            dayMaxEventRows: 4,
+                        },
+                    },
                 };
 
                 // Merge calendar defaults with custom options (if available)
@@ -267,14 +292,17 @@
                     }
                 }
 
-                calendar.fullCalendar(calendar_options);
+                const fullCalendar = new FullCalendar.Calendar(calendar[0], calendar_options);
+                fullCalendar.render();
+
+                this.setFullCalendar(fullCalendar);
 
                 this.setRendered(true);
             }
         });
 
         $('.ss-gridfield .ss-gridfield-calendar .fc-prev-button, .ss-gridfield .ss-gridfield-calendar .fc-next-button').entwine({
-            onmatch: function() {
+            onmatch: function () {
                 this._super();
 
                 this.addClass('btn')

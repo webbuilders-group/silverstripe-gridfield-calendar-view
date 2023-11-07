@@ -8,7 +8,7 @@
     --fc-button-active-border-color: #cdccd0;
     --fc-event-bg-color: #358FC3;
     --fc-event-border-color: #358FC3;
-    --fc-today-bg-color: #F0F2F4;
+    --fc-today-bg-color: rgba(0, 70, 165, 0.15);
 }
 
 /**** Calendar View Toggle ****/

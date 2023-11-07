@@ -191,7 +191,7 @@
     font-size: 1rem;
 }
 
-.ss-gridfield-calendar .calendar-display .fc-h-event.deleted-event {
+.ss-gridfield-calendar .calendar-display .fc-h-event.deleted-event * {
     text-decoration: line-through;
 }
 

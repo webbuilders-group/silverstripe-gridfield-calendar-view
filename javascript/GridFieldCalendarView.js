@@ -210,7 +210,7 @@
                             tip.attr('id', self.getGridFieldID() + '_calendar_tt' + details.event.id);
 
                             if (details.event.extendedProps.className) {
-                                tip.addClass(details.event.extendedProps.className.join(' '));
+                                tip.addClass(details.event.extendedProps.className);
                             }
 
                             tip.append($('<p class="evt-title"/>').text(details.event.title));

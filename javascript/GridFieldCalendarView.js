@@ -262,10 +262,26 @@
                         const calendarOffset = calendar.offset();
                         const element = $(details.el);
                         const elementPos = element.offset();
+                        const outerWidth = tip.outerWidth();
+
+                        // Calculate the left position
+                        let leftPos = (elementPos.left - calendarOffset.left) + (element.outerWidth() / 2);
+
+                        // If the left position is off the screen align it to the left
+                        if (leftPos - (outerWidth / 2) < 0) {
+                            leftPos = (outerWidth / 2);
+                        }
+
                         tip
-                            .css('left', ((elementPos.left - calendarOffset.left) + (element.outerWidth() / 2)) + 'px')
+                            .css('left', leftPos + 'px')
                             .css('top', ((elementPos.top - calendarOffset.top) + element.outerHeight()) + 'px')
                             .show();
+
+                        // If the popup is off the right side bring it back in
+                        if (tip.offset().left + outerWidth + 20 > document.documentElement.clientWidth) {
+                            const offset = (tip.offset().left + outerWidth + 20) - document.documentElement.clientWidth;
+                            tip.css('left', (((elementPos.left - calendarOffset.left) + (element.outerWidth() / 2)) - offset) + 'px');
+                        }
                     },
 
                     /**

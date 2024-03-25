@@ -75,8 +75,7 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
     {
         $controller = Controller::curr();
 
-        // Get the current query string and and to the request
-        // if available
+        // Get the current query string and and to the request if available
         $request = $controller->getRequest();
         $request_vars = $request->getVars();
 
@@ -96,8 +95,11 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
         ));
 
         $calendarData = ArrayData::create([
-            'FeedLink' => $gridField->Link('calendar-data-feed') . $params,
+            'FeedLink' => Controller::join_links($gridField->Link('calendar-data-feed'), $params),
         ]);
+
+
+        $this->extraCalendarData($gridField, $calendarData, $request);
 
         Requirements::customScript(<<<JS
             const gridfield_calendar_data = $options;
@@ -111,7 +113,7 @@ JS
         Requirements::javascript('webbuilders-group/silverstripe-gridfield-calendar-view:javascript/GridFieldCalendarView.js');
 
         $fragments = [
-            'after' => $calendarData->renderWith(self::class),
+            'after' => $calendarData->renderWith([get_class($this), self::class]),
         ];
 
         if ($this->_togglePosition != 'after') {
@@ -400,5 +402,15 @@ JS
     public function initDefaultState(GridState_Data $data): void
     {
         $data->GridFieldCalendarView->initDefaults(['view_mode' => $this->_defaultViewMode]);
+    }
+
+    /**
+     * Allows for adding extra calendar data to the render process
+     * @param GridField $gridField Grid Field the calendar data applies to
+     * @param ArrayData $calendarData Calendar data to augment
+     * @param HTTPRequest $request Current HTTP Request Object
+     */
+    protected function extraCalendarData(GridField $gridField, ArrayData $calendarData, HTTPRequest $request)
+    {
     }
 }

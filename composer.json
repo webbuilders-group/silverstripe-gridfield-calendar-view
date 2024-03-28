@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "silverstripe/framework": "~4.2|^5.0"
+        "silverstripe/framework": "~4.11|^5.0"
     },
     "support": {
         "issues": "https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/issues"

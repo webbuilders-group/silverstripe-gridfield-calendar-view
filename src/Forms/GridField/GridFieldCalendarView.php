@@ -5,6 +5,7 @@ use InvalidArgumentException;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\Forms\GridField\AbstractGridFieldComponent;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridField_StateProvider;
@@ -16,7 +17,7 @@ use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 use WebbuildersGroup\GridFieldDeletedItems\Forms\GridFieldDeletedManipulator;
 
-class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHandler, GridField_StateProvider
+class GridFieldCalendarView extends AbstractGridFieldComponent implements GridField_HTMLProvider, GridField_URLHandler, GridField_StateProvider
 {
     use Injectable;
 

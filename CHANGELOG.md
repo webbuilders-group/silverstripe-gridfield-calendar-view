@@ -1,5 +1,9 @@
 # Change Log
 
+## [3.0.0](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/tree/3.0.0) (2024-03-28)
+[Full Changelog](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/compare/2.2.1...3.0.0)
+- Breaking change you can no longer simply extend the calendar using `gridfield_calendar_data`. You must use jQuery entwine and get the default options using `this.getCalendarOptions()` on the `.ss-gridfield .ss-gridfield-calendar` element, make your changes and call `this.setCalendarOptions()` passing in the modified options before calling `this._super()`.
+
 ## [2.2.1](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/tree/2.2.1) (2023-11-08)
 [Full Changelog](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/compare/2.2.0...2.2.1)
 

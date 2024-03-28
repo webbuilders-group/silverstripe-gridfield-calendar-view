@@ -101,10 +101,9 @@ class GridFieldCalendarView implements GridField_HTMLProvider, GridField_URLHand
 
         $this->extraCalendarData($gridField, $calendarData, $request);
 
-        Requirements::customScript(<<<JS
-            const gridfield_calendar_data = $options;
-JS
-        );
+
+        $calendarData->CalendarOptions = $options;
+
 
         Requirements::css('webbuilders-group/silverstripe-gridfield-calendar-view:css/GridFieldCalendarView.css');
 

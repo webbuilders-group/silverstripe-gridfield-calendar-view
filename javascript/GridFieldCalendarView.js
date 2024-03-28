@@ -76,6 +76,7 @@
             GridFieldID: null,
             Rendered: false,
             FullCalendar: null,
+            CalendarOptions: null,
 
             onadd: function () {
                 this._super();
@@ -87,6 +88,8 @@
                     gridField.find('.ss-gridfield-table, .grid-field__table').hide();
                     this.show().redraw();
                 }
+
+                this.setCalendarOptions(JSON.parse(this.attr('data-options')));
             },
 
             redraw: function () {
@@ -302,11 +305,10 @@
                 };
 
                 // Merge calendar defaults with custom options (if available)
-                if (typeof gridfield_calendar_data !== 'undefined') {
-                    for (let key in gridfield_calendar_data) {
-                        calendar_options[key] = gridfield_calendar_data[key];
-                    }
-                }
+                const gridfield_calendar_data = this.getCalendarOptions();
+                Object.getOwnPropertyNames(gridfield_calendar_data).forEach((key) => {
+                    calendar_options[key] = gridfield_calendar_data[key];
+                });
 
                 const fullCalendar = new FullCalendar.Calendar(calendar[0], calendar_options);
                 fullCalendar.render();

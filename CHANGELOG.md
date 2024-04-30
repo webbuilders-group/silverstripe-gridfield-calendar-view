@@ -4,6 +4,7 @@
 [Full Changelog](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/compare/3.0.1...3.1.0)
 - `GridFieldCalendarView::handleCalendarFeed()` now returns a json string with the calendar data as under the `data` key, this a backwards compatible change
 - Changing the month/year in the calendar now properly updates the state in the url when the new response format is used
+- Added event `calendar-data-updated` when the data loads
 
 ## [3.0.1](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/tree/3.0.1) (2024-04-30)
 [Full Changelog](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/compare/3.0.0...3.0.1)

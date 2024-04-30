@@ -158,6 +158,8 @@
                                     
                                     successCallback(response.data);
                                 }
+                                
+                                this.trigger('calendar-data-updated', response);
                             },
                             failure: () => {
                                 jQuery.noticeAdd({

@@ -149,10 +149,7 @@
                             url: self.attr('data-calendar-feed'),
                             method: 'post',
                             data,
-                            success: (response) => {
-
-                                successCallback(response);
-                            },
+                            success: successCallback,
                             failure: () => {
                                 jQuery.noticeAdd({
                                     text: 'Error loading calendar, please try again later',
@@ -164,7 +161,6 @@
                                 failureCallback();
                             },
                         });
-                        // className: 'cms-panel-link',
                     },
                     buttonIcons: {
                         prev: ' font-icon-left-open-big',
@@ -190,11 +186,12 @@
                      * @returns {string[]}
                      */
                     eventClassNames: (details) => {
+                        const classes = ['cms-panel-link'];
                         if (details.event.extendedProps.className) {
-                            return [details.event.extendedProps.className];
+                            classes.push(details.event.extendedProps.className);
                         }
 
-                        return [];
+                        return classes;
                     },
 
                     /**

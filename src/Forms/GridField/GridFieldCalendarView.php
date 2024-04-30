@@ -392,7 +392,10 @@ class GridFieldCalendarView extends AbstractGridFieldComponent implements GridFi
         // Respond with the resulting json
         $response = Controller::curr()->getResponse();
         $response->addHeader('Content-Type', 'application/json; charset=utf-8');
-        return json_encode($result);
+        return json_encode([
+            'url' => $gridField->addAllStateToUrl($gridField->Link()),
+            'data' => $result,
+        ]);
     }
 
     /**

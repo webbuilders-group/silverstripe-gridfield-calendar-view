@@ -134,8 +134,6 @@
                         }
 
                         gridField.setState('GridFieldCalendarView', state);
-                        gridField.keepStateInHistory();
-
 
                         const data = {
                             'start-date': fetchInfo.startStr,
@@ -149,7 +147,18 @@
                             url: self.attr('data-calendar-feed'),
                             method: 'post',
                             data,
-                            success: successCallback,
+                            success: (response) => {
+                                if (typeof response.url === 'undefined') {
+                                    successCallback(response);
+                                } else {
+                                    const gridFieldName = gridField.data('name');
+                                    const urlQueryString = gridField.buildUrlQueryString(response.url, gridFieldName);
+                                    const url = window.location.pathname + urlQueryString;
+                                    window.ss.router.replace(url, undefined, undefined, false);
+                                    
+                                    successCallback(response.data);
+                                }
+                            },
                             failure: () => {
                                 jQuery.noticeAdd({
                                     text: 'Error loading calendar, please try again later',

@@ -112,7 +112,6 @@
                 /**** Bootstrap Calendar ****/
                 const calendar = self.find('.calendar-display');
                 const stateField = gridField.find('.gridstate');
-                let monthHop = false;
 
                 //Reload the start date from the grid state
                 let startDate = null;
@@ -123,62 +122,58 @@
                 const calendar_options = {
                     dayMaxEventRows: true,
                     initialDate: startDate,
-                    events: {
-                        url: self.attr('data-calendar-feed'),
-                        method: 'POST',
-                        startParam: 'start-date',
-                        endParam: 'end-date',
-                        extraParams: () => {
-                            const dataObj = {
-                                SecurityID: self.closest('form').find('input[name=SecurityID]').val(),
-                            };
-                            dataObj[stateField.attr('name')] = stateField.val();
+                    events: (fetchInfo, successCallback, failureCallback) => {
+                        const state = (gridField.getState().GridFieldCalendarView || {});
 
-                            return dataObj;
-                        },
-                        failure: () => {
-                            jQuery.noticeAdd({
-                                text: 'Error loading calendar, please try again later',
-                                type: 'error',
-                                stayTime: 5000,
-                                inEffect: {left: '0', opacity: 'show'}
-                            });
-                        },
-                        className: 'cms-panel-link',
+                        // Store start date in the state
+                        const startDate = moment(fetchInfo.startStr);
+                        if (fetchInfo.start.getDate() == 1) {
+                            state.start_date = startDate.format('YYYY-MM-01');
+                        } else {
+                            state.start_date = startDate.add(1, 'months').format('YYYY-MM-01');
+                        }
+
+                        gridField.setState('GridFieldCalendarView', state);
+                        gridField.keepStateInHistory();
+
+
+                        const data = {
+                            'start-date': fetchInfo.startStr,
+                            'end-date': fetchInfo.endStr,
+                            SecurityID: self.closest('form').find('input[name=SecurityID]').val(),
+                        };
+
+                        data[stateField.attr('name')] = stateField.val();
+
+                        $.ajax({
+                            url: self.attr('data-calendar-feed'),
+                            method: 'post',
+                            data,
+                            success: (response) => {
+
+                                successCallback(response);
+                            },
+                            failure: () => {
+                                jQuery.noticeAdd({
+                                    text: 'Error loading calendar, please try again later',
+                                    type: 'error',
+                                    stayTime: 5000,
+                                    inEffect: {left: '0', opacity: 'show'}
+                                });
+
+                                failureCallback();
+                            },
+                        });
+                        // className: 'cms-panel-link',
                     },
                     buttonIcons: {
                         prev: ' font-icon-left-open-big',
                         next: ' font-icon-right-open-big',
                     },
 
-                    /**
-                     * Handles when the view is rendered
-                     * @param {object} view Calendar View Object
-                     */
-                    viewDidMount: (view) => {
-                        if (monthHop) {
-                            const state = gridField.getState().GridFieldCalendarView;
-                            if (state) {
-                                //Store start date in the state
-                                if (view.start.format('D') == 1) {
-                                    state.start_date = view.start.format('YYYY-MM-01');
-                                } else {
-                                    state.start_date = view.start.clone().add(1, 'months').format('YYYY-MM-01');
-                                }
-
-                                gridField.setState('GridFieldCalendarView', state);
-                            }
-                            monthHop = false;
-                        }
-                    },
-
-                    /**
-                     * Handles when the view is destroyed
-                     */
-                    viewWillUnmount: () => {
-                        //Remove all calendar tips
+                    datesSet: () => {
+                        // Remove all calendar tips
                         $('.gridfield-calendar-tip').remove();
-                        monthHop = true;
                     },
 
                     /**
@@ -311,9 +306,9 @@
                 });
 
                 const fullCalendar = new FullCalendar.Calendar(calendar[0], calendar_options);
-                fullCalendar.render();
-
                 this.setFullCalendar(fullCalendar);
+
+                fullCalendar.render();
 
                 this.setRendered(true);
             }

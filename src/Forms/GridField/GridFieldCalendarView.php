@@ -1,7 +1,6 @@
 <?php
 namespace WebbuildersGroup\GridFieldCalendarView\Forms\GridField;
 
-use InvalidArgumentException;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Core\Injector\Injectable;
@@ -12,10 +11,10 @@ use SilverStripe\Forms\GridField\GridField_StateProvider;
 use SilverStripe\Forms\GridField\GridField_URLHandler;
 use SilverStripe\Forms\GridField\GridFieldPaginator;
 use SilverStripe\Forms\GridField\GridState_Data;
+use SilverStripe\Model\ArrayData;
 use SilverStripe\Security\SecurityToken;
-use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
-use WebbuildersGroup\GridFieldDeletedItems\Forms\GridFieldDeletedManipulator;
+use InvalidArgumentException;
 
 class GridFieldCalendarView extends AbstractGridFieldComponent implements GridField_HTMLProvider, GridField_URLHandler, GridField_StateProvider
 {

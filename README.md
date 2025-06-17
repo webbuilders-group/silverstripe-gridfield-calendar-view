@@ -7,7 +7,7 @@ A component for viewing a GridField's data as a calendar, useful for things like
 
 
 ## Requirements
-* SilverStripe Framework 4.2+ | 5.0+
+* SilverStripe Framework ^6.0
 
 
 ## Installation
@@ -34,4 +34,4 @@ $myGridField->getConfig()->addComponent(new GridFieldCalendarView(
     ));
 ```
 
-There are more options available, when adding the component for information on these see [the documentation](docs/index.md) for more information.
+There are more options available, when adding the component for information on these see [the documentation](docs/en/index.md) for more information.

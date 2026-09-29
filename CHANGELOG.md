@@ -1,5 +1,9 @@
 # Change Log
 
+## [3.1.1](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/tree/3.1.1) (2026-09-29)
+[Full Changelog](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/compare/3.1.0...3.1.1)
+- Fix TypeError when restoring calendar view before options are loaded #8
+
 ## [3.1.0](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/tree/3.1.0) (2024-04-30)
 [Full Changelog](https://github.com/webbuilders-group/silverstripe-gridfield-calendar-view/compare/3.0.1...3.1.0)
 - `GridFieldCalendarView::handleCalendarFeed()` now returns a json string with the calendar data as under the `data` key, this a backwards compatible change

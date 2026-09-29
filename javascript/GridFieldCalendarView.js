@@ -81,6 +81,9 @@
             onadd: function () {
                 this._super();
 
+                //Load the calendar options before a possible redraw, which depends on them
+                this.setCalendarOptions(JSON.parse(this.attr('data-options')));
+
                 //Restore the calendar to the front if the rembered state says to
                 const gridField = this.closest('.ss-gridfield');
                 const state = gridField.getState().GridFieldCalendarView;
@@ -88,8 +91,6 @@
                     gridField.find('.ss-gridfield-table, .grid-field__table').hide();
                     this.show().redraw();
                 }
-
-                this.setCalendarOptions(JSON.parse(this.attr('data-options')));
             },
 
             redraw: function () {
@@ -308,7 +309,7 @@
                 };
 
                 // Merge calendar defaults with custom options (if available)
-                const gridfield_calendar_data = this.getCalendarOptions();
+                const gridfield_calendar_data = this.getCalendarOptions() || {};
                 Object.getOwnPropertyNames(gridfield_calendar_data).forEach((key) => {
                     calendar_options[key] = gridfield_calendar_data[key];
                 });
